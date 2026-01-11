@@ -29,7 +29,7 @@ public class TestSubsystem extends SubsystemBase {
     }
 
     public void start() {
-        testMotor.set(SmartDashboard.getNumber("Test Motor Power", 50) / 2048);
+        testMotor.set(-SmartDashboard.getNumber("Test Motor Power", 50) / 2048);
         // testMotor.set(1);
     }
 
