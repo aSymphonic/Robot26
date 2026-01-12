@@ -95,7 +95,7 @@ public final class Constants
 
     // Flywheel tuning defaults
     // Default target RPM for flywheel (used as a manual override/starting value)
-    public static final double FLYWHEEL_DEFAULT_TARGET_RPM = 1315.0;
+    public static final double FLYWHEEL_DEFAULT_TARGET_RPM = 1845.0;
     // Default flywheel acceleration in RPM per second (used for ramping if implemented)
     public static final double FLYWHEEL_DEFAULT_ACCEL_RPMS = 20000.0;
     // Default open-loop start percent for flywheel when controlled by code only (0.0 - 1.0)
