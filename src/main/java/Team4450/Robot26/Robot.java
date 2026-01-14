@@ -221,8 +221,6 @@ public class Robot extends TimedRobot
 
     robotContainer.getMatchInformation();
 
-    robotContainer.resetFaults();
-    
     // RobotContainer function determines which auto command is selected to run.
 
     Command autonomousCommand = robotContainer.getAutonomousCommand();
@@ -244,8 +242,7 @@ public class Robot extends TimedRobot
    * should be nothing here.
    */
   @Override
-  public void autonomousPeriodic() 
-  {
+  public void autonomousPeriodic() {
   }
 
   /**
@@ -266,7 +263,6 @@ public class Robot extends TimedRobot
     SmartDashboard.putBoolean("Disabled", false);
     SmartDashboard.putBoolean("Teleop Mode", true);
 
-    robotContainer.resetFaults();
     //robotContainer.fixPathPlannerGyro(); rich // Because of this only use blue alliance during practice
 
     // Driving handled by DriveCommand which is default command for the DriveBase.

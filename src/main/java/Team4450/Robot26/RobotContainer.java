@@ -6,26 +6,19 @@ import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import Team4450.Robot26.commands.DriveCommand;
-import Team4450.Robot26.subsystems.Candle;
 import Team4450.Robot26.subsystems.TestSubsystem;
 import Team4450.Robot26.subsystems.DriveBase;
 import Team4450.Robot26.subsystems.ShuffleBoard;
 import Team4450.Robot26.subsystems.VisionSubsystem;
 import Team4450.Robot26.subsystems.QuestNavSubsystem;
-import Team4450.Robot26.subsystems.LimelightHelpers;
 import Team4450.Lib.MonitorPDP;
 import Team4450.Lib.Util;
-import Team4450.Lib.CameraFeed;
 import Team4450.Lib.XboxController;
-import Team4450.Lib.MonitorCompressorPH;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.util.sendable.SendableRegistry;
@@ -107,12 +100,6 @@ public class RobotContainer {
 
 	private PowerDistribution		pdp = new PowerDistribution(REV_PDB, PowerDistribution.ModuleType.kRev);
 
-	// Compressor class controls the CTRE/REV Pneumatics control Module.
-	// Note: When you add the compressor back in, look at resetFaults method.
-	//private Compressor				pcm = new Compressor(PneumaticsModuleType.REVPH);
-
-	private MonitorPDP     			monitorPDPThread;
-
 	// Trajectories we load manually.
 	//public static PathPlannerTrajectory	ppTestTrajectory;
 
@@ -148,10 +135,6 @@ public class RobotContainer {
 		else
 			isClone = true;
  		
-		// Set compressor enabled switch on dashboard from properties file.
-		// Later code will read that setting from the dashboard and turn 
-		// compressor on or off in response to dashboard setting.
- 		
 		// Invert driving joy sticks Y axis so + values mean forward.
 		// Invert driving joy sticks X axis so + values mean right.
 	  
@@ -172,11 +155,6 @@ public class RobotContainer {
 		// Create any persistent commands.
 
 		// Set any subsystem Default commands.
-
-		// This sets up the photonVision subsystem to constantly update the robotDrive odometry
-	    // with AprilTags (if it sees them). (As well as vision simulator)
-
-		// pvAlgaeTagCamera.setDefaultCommand(new UpdateVisionPose(driveBase, pvAlgaeTagCamera));
 
 		// Set the default drive command. This command will be scheduled automatically to run
 		// every teleop period and so use the gamepad joy sticks to drive the robot. 
@@ -390,25 +368,6 @@ public class RobotContainer {
     		  		   gameMessage);
 	}
 		
-	/**
-	 * Reset sticky faults in PDP and turn compressor on/off as
-	 * set by switch on DS.
-	 */
-	public void resetFaults()
-	{
-		// This code turns on/off the automatic compressor management if requested by DS. Putting this
-		// here is a convenience since this function is called at each mode change.
-		// if (SmartDashboard.getBoolean("CompressorEnabled", true)) 
-		// 	pcm.enableDigital();
-		// else
-		// 	pcm.disable();
-		
-		pdp.clearStickyFaults();
-		//pcm.clearAllStickyFaults(); // Add back if we use a CTRE pcm.
-		
-		if (monitorPDPThread != null) monitorPDPThread.reset();
-    }
-
 	// public void fixPathPlannerGyro() { rich
 	// 	driveBase.fixPathPlannerGyro();
 	// }
