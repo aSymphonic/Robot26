@@ -59,7 +59,14 @@ public final class Constants {
 	public static final int		DRIVER_PAD = 0, UTILITY_PAD = 1;
 
     public static String LIMELIGHT_LEFT = "limelight-left";
+    // Add limelight left offset
     public static String LIMELIGHT_RIGHT = "limelight-right";
+    // Add limelight right offset
+
+    public static double ROBOT_TO_QUEST_X = 0.3;
+    public static double ROBOT_TO_QUEST_Y = 0.3;
+    public static double ROBOT_TO_QUEST_Z = 0.3;
+
     public static int VISION_BUFFER_SIZE = 1;
 
     // Assume all field measurements are in meters
