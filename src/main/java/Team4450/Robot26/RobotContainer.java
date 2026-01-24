@@ -153,6 +153,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Heading P", Constants.ROBOT_HEADING_KP);
 		SmartDashboard.putNumber("Heading I", Constants.ROBOT_HEADING_KI);
         SmartDashboard.putNumber("Heading D", Constants.ROBOT_HEADING_KD);
+		SmartDashboard.putBoolean("Heading PID Toggle", Constants.ROBOT_HEADING_PID_TOGGLE);
 
 		// Create any persistent commands.
 

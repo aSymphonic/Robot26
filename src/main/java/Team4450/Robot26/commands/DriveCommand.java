@@ -84,6 +84,7 @@ public class DriveCommand extends Command
         
         if (robot.isAutonomous()) return;
 
+        if (ROBOT_HEADING_PID_TOGGLE) {
         // This finds where the correct hub position is
         Pose2d hubPosition;
         if (alliance == DriverStation.Alliance.Blue) {
@@ -138,9 +139,25 @@ public class DriveCommand extends Command
 
         // Uses a PID and the previous assigned target heading to rotate there
         double rotation = -headingPID.calculate(drivebase.getYaw180(), -targetHeading);
-        // double rotation = rotationXSupplier.getAsDouble();
         double throttle = throttleSupplier.getAsDouble();
         double strafe = strafeSupplier.getAsDouble();
+        
+        ConsoleEveryX rotationLog = new ConsoleEveryX(200);
+        rotationLog.update("Heading PID rotation output: " + String.valueOf(rotation));
+
+        headingPID.setP(SmartDashboard.getNumber("Heading P", Constants.ROBOT_HEADING_KP));
+        headingPID.setI(SmartDashboard.getNumber("Heading I", Constants.ROBOT_HEADING_KI));
+        headingPID.setD(SmartDashboard.getNumber("Heading D", Constants.ROBOT_HEADING_KD));
+
+        drivebase.drive(throttle, strafe, rotation);
+
+        return;
+    }
+
+        double rotation = rotationXSupplier.getAsDouble();
+        double throttle = throttleSupplier.getAsDouble();
+        double strafe = strafeSupplier.getAsDouble();
+
 
         // Squaring input is one way to ramp JS inputs to reduce sensitivity.
         // Please do not square the headingPID
@@ -152,10 +169,6 @@ public class DriveCommand extends Command
         //
         ConsoleEveryX rotationLog = new ConsoleEveryX(200);
         rotationLog.update("Heading PID rotation output: " + String.valueOf(rotation));
-
-        headingPID.setP(SmartDashboard.getNumber("Heading P", Constants.ROBOT_HEADING_KP));
-        headingPID.setI(SmartDashboard.getNumber("Heading I", Constants.ROBOT_HEADING_KI));
-        headingPID.setD(SmartDashboard.getNumber("Heading D", Constants.ROBOT_HEADING_KD));
 
         drivebase.drive(throttle, strafe, rotation);
     }

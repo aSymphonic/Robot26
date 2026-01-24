@@ -121,6 +121,7 @@ public final class Constants {
     // public static double ROBOT_HEADING_KF = 0;
     public static double ROBOT_HEADING_TOLERANCE_DEG = 0.5;
     // public static double ROBOT_HEADING_MAX_OUTPUT = 1;
+    public static boolean ROBOT_HEADING_PID_TOGGLE = true;
 
     public static double FLYWHEEL_MAX_THEORETICAL_RPM = 4000;
 
