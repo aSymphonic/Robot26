@@ -64,7 +64,7 @@ public final class Constants {
     public static String LIMELIGHT_RIGHT = "limelight-right";
     // Add limelight right offset
 
-    public static Pose3d ROBOT_TO_QUEST = new Pose3d(0.304, 0, 0, Rotation3d.kZero);
+    public static Pose3d ROBOT_TO_QUEST = new Pose3d(0.304, 0, 0, new Rotation3d(Math.toRadians(0), Math.toRadians(32), Math.toRadians(0)));
     public static Pose3d ROBOT_TO_LIMELIGHT_LEFT = new Pose3d(0, 0.282, 0, Rotation3d.kZero);
     public static Pose3d ROBOT_TO_LIMELIGHT_RIGHT = new Pose3d(0, -0.282, 0, Rotation3d.kZero);
 
