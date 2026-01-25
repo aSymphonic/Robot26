@@ -36,13 +36,12 @@ import Team4450.Robot26.RobotContainer;
  */
 public class Drivebase extends SubsystemBase {
     private CommandSwerveDrivetrain     sdsDriveBase = TunerConstants.createDrivetrain();
-    private QuestNavSubsystem questNavSubsystem;
 
     public PigeonWrapper pigeonWrapper = new PigeonWrapper(sdsDriveBase.getPigeon2());
 
     // This should init to whatever the limelights see during the init period, otherwise set a smartdashboard and a console log into if it does not
     public Pose2d robotPose = new Pose2d(0, 0, Rotation2d.kZero);
-    public Transform2d limelightOffsetPose = new Transform2d(0, 0, Rotation2d.kZero);
+    public Pose2d limelightPoseEstimate = new Pose2d(0, 0, Rotation2d.kZero);
     
     private final Telemetry     		logger = new Telemetry(kMaxSpeed);
     // Field2d object creates the field display on the simulation and gives us an API
@@ -68,8 +67,6 @@ public class Drivebase extends SubsystemBase {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
     public Drivebase() {
-        this.questNavSubsystem = RobotContainer.questNavSubsystem;
-
         Util.consoleLog();
 
         // Add pigeon gyro as a Sendable. Updates the dashboard heading indicator automatically.
@@ -265,7 +262,7 @@ public class Drivebase extends SubsystemBase {
      * @return Robot pose.
      */
     public Pose2d getPose() {
-        return robotPose.transformBy(this.limelightOffsetPose);
+        return robotPose;
     }
 
     @Deprecated
@@ -309,14 +306,7 @@ public class Drivebase extends SubsystemBase {
         // Remove any vision poses the break the laws of physics
 
         // Basic vision update that just sets the pose, this is good enough for testing if it is working
-        this.limelightOffsetPose = pose.minus(getPose());
-
-        // If the x or y difference from the robots current pose to the limelight estimate pose update the current quest estimate for the position
-        if (this.limelightOffsetPose.getX() > 0.2 || this.limelightOffsetPose.getY() > 0.2) {
-            Pose3d limelightEstimatePose = new Pose3d(getPose().plus(this.limelightOffsetPose));
-            questNavSubsystem.resetQuestOdometry(limelightEstimatePose);
-            Util.consoleLog("Updated quest odomety to pose: ", limelightEstimatePose.toString());
-        }
+        this.limelightPoseEstimate = pose;
     }
 
     public double getAngleToAim(Pose2d targetPose) {

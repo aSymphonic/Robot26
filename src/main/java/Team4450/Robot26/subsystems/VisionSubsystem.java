@@ -32,7 +32,7 @@ public class VisionSubsystem extends SubsystemBase {
     // SetRobotOrientation assumes a centered (see the map generator) or blue-corner origin. CCW-positive, 0 degrees -> facing red alliance wall in FRC.
     //
     Drivebase drivebase;
-    boolean enabled = false;
+    boolean enabled = true;
     int i = 0;
 
     public VisionSubsystem(Drivebase drivebase) {
@@ -118,6 +118,7 @@ public class VisionSubsystem extends SubsystemBase {
 
                 if (useLeftLimelight) {
                     Util.consoleLog("Add left vision");
+                    Util.consoleLog(left_mt2.pose.toString());
                     drivebase.addVisionMeasurement(left_mt2.pose, left_mt2.timestampSeconds);
                 }
             }
@@ -134,7 +135,6 @@ public class VisionSubsystem extends SubsystemBase {
             }
 
             if (useLeftLimelight) {
-                Util.consoleLog("Add left vision");
                 drivebase.addVisionMeasurement(left_mt2.pose, left_mt2.timestampSeconds);
             }
         }

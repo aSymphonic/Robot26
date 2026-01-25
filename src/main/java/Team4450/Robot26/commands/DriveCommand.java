@@ -84,7 +84,7 @@ public class DriveCommand extends Command
         
         if (robot.isAutonomous()) return;
 
-        if (ROBOT_HEADING_PID_TOGGLE) {
+        if (SmartDashboard.getBoolean("Heading PID Toggle", Constants.ROBOT_HEADING_PID_TOGGLE)) {
         // This finds where the correct hub position is
         Pose2d hubPosition;
         if (alliance == DriverStation.Alliance.Blue) {

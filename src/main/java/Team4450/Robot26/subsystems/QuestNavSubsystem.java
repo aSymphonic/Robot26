@@ -25,9 +25,12 @@ public class QuestNavSubsystem extends SubsystemBase {
 
     /** Creates a new QuestNavSubsystem. */
     private Drivebase drivebase;
+    private double resetTimer = 0; // Change this to a real timer at some point;
     public QuestNavSubsystem(Drivebase drivebase) {
         this.drivebase = drivebase;
         questNav = new QuestNav();
+
+        this.resetTimer = 0;
 
         resetToZeroPose();
     }
@@ -76,6 +79,18 @@ public class QuestNavSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // If the x or y difference from the robots current pose to the limelight estimate pose update the current quest estimate for the position
+        if (resetTimer > 200) {
+            if (drivebase.limelightPoseEstimate.getX() > 0.2 || drivebase.limelightPoseEstimate.getY() > 0.2) {
+                Pose3d limelightEstimatePose = new Pose3d(drivebase.limelightPoseEstimate);
+                resetQuestOdometry(limelightEstimatePose);
+                Util.consoleLog("Updated quest odomety to pose: ", limelightEstimatePose.toString());
+                resetTimer = 0;
+            }
+        } else {
+            resetTimer++;
+        }
+
         if (questNav.isConnected()) {
             SmartDashboard.putBoolean("Quest Connected", true);
         } else {
