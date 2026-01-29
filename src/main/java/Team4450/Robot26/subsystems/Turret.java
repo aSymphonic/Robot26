@@ -21,6 +21,8 @@ public class Turret extends SubsystemBase {
     private boolean turretAccelEnabled = TURRET_ACCELERATION_ENABLED;
     // Flywheel runtime tunables (RPM and RPM/s units on dashboard)
     // (flywheel is currently controlled by TestSubsystem; no dashboard-driven flywheel tunables here)
+    
+    private final Drivebase driveBase;
 
     private final DriveBase driveBase;
 
@@ -54,6 +56,7 @@ public class Turret extends SubsystemBase {
     double hudTurretMaxVelRpm = SmartDashboard.getNumber("Turret/MaxVelocityRPM", TURRET_DEFAULT_MAX_VELOCITY_RPM);
     double hudTurretMaxAccelRpms = SmartDashboard.getNumber("Turret/MaxAccelerationRPMperSec", TURRET_DEFAULT_MAX_ACCEL_RPMS);
     turretAccelEnabled = SmartDashboard.getBoolean("Turret/AccelEnabled", turretAccelEnabled);
+
 
     // Convert RPM-based dashboard values to internal deg/sec units: 1 RPM = 360 deg / 60 sec = 6 deg/sec
     turretMaxVelDegPerSec = hudTurretMaxVelRpm * 6.0;

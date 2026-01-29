@@ -9,7 +9,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import Team4450.Lib.Util;
 import Team4450.Lib.XboxController;
 import Team4450.Robot26.commands.DriveCommand;
-import Team4450.Robot26.subsystems.DriveBase;
+import Team4450.Robot26.subsystems.Drivebase;
 import Team4450.Robot26.subsystems.QuestNavSubsystem;
 import Team4450.Robot26.subsystems.ShuffleBoard;
 import Team4450.Robot26.subsystems.TestSubsystem;
@@ -40,7 +40,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
  */
 public class RobotContainer {
 	// Subsystems.
-	public static DriveBase drivebase;
+	public static Drivebase drivebase;
 	public static ShuffleBoard shuffleBoard;
 
     // Vision based subsystems all send data to the drivebase for use
@@ -143,13 +143,17 @@ public class RobotContainer {
         // The pigeon is setup somewhere in the drivebase function.
         // It is important to note that the pigeon documentation says that the device does not need to be still on boot,
         // however the documentation also says that the drift is worse when started while moving.
-		drivebase = new DriveBase();
+		drivebase = new Drivebase();
         visionSubsystem = new VisionSubsystem(drivebase);
         questNavSubsystem = new QuestNavSubsystem(drivebase);
 
 		throttlePID = new PIDController(Constants.ROBOT_THROTTLE_KP, Constants.ROBOT_THROTTLE_KI, Constants.ROBOT_THROTTLE_KD);
 		strafePID = new PIDController(Constants.ROBOT_STRAFE_KP, Constants.ROBOT_STRAFE_KI, Constants.ROBOT_STRAFE_KD);
 		headingPID = new PIDController(Constants.ROBOT_HEADING_KP, Constants.ROBOT_HEADING_KI, Constants.ROBOT_HEADING_KD);
+        SmartDashboard.putNumber("Heading P", Constants.ROBOT_HEADING_KP);
+		SmartDashboard.putNumber("Heading I", Constants.ROBOT_HEADING_KI);
+        SmartDashboard.putNumber("Heading D", Constants.ROBOT_HEADING_KD);
+		SmartDashboard.putBoolean("Heading PID Toggle", Constants.ROBOT_HEADING_PID_TOGGLE);
 
 		// Create any persistent commands.
 
@@ -281,14 +285,14 @@ public class RobotContainer {
 		// new Trigger(() -> driverController.getAButton()) // Rich
 		//  	.onTrue(new InstantCommand(driveBase::toggleFieldRelativeDriving));
 
-		new Trigger(() -> driverController.getAButton())
-		 	.onTrue(new InstantCommand(questNavSubsystem::resetTestPose));
+		//new Trigger(() -> driverController.getAButton())
+		 	//.onTrue(new InstantCommand(questNavSubsystem::resetTestPose));
 
 		// new Trigger(() -> driverController.getBButton())
 		//  	.onTrue(new InstantCommand(questNavSubsystem::resetToZeroPose));
 
-		new Trigger(() -> driverController.getBButton())
-		 	.onTrue(new InstantCommand(() -> drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.kZero))));
+		//new Trigger(() -> driverController.getBButton())
+		 	//.onTrue(new InstantCommand(() -> drivebase.resetOdometry(new Pose2d(0, 0, Rotation2d.kZero))));
 
 		// // Toggle motor brake mode.
 		// new Trigger(() -> driverController.getBButton()) // Rich
@@ -301,11 +305,11 @@ public class RobotContainer {
 		// -------- Utility controller buttons ----------
 
 		// Driver controller A/B used for flywheel start/stop (TestSubsystem currently drives the motor)
-		// new Trigger(() -> driverController.getAButton())
-		// 	.onTrue(new InstantCommand(testSubsystem::start));
+		 new Trigger(() -> driverController.getAButton())
+		 	.onTrue(new InstantCommand(testSubsystem::start));
 
-		// new Trigger(() -> driverController.getBButton())
-		// 	.onTrue(new InstantCommand(testSubsystem::stop));
+		 new Trigger(() -> driverController.getBButton())
+		 	.onTrue(new InstantCommand(testSubsystem::stop));
 
 	}
 

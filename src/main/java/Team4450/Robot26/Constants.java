@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-	public static String		PROGRAM_NAME = "ORF26-01.09.26";
+	public static String		PROGRAM_NAME = "ORF26-01.21.26";
 
 	public static Robot			robot;
 
@@ -43,7 +43,7 @@ public final class Constants {
     
     // Pneumatic valve controller port assignments.
     
-    // CAMERAS 
+    // Cameras 
 
     // The names of the cameras in the PhotonVision software
 
@@ -59,13 +59,14 @@ public final class Constants {
 	public static final int		DRIVER_PAD = 0, UTILITY_PAD = 1;
 
     public static String LIMELIGHT_LEFT = "limelight-left";
+
     // Add limelight left offset
     public static String LIMELIGHT_RIGHT = "limelight-right";
     // Add limelight right offset
 
-    public static double ROBOT_TO_QUEST_X = 0.304;
-    public static double ROBOT_TO_QUEST_Y = 0;
-    public static double ROBOT_TO_QUEST_Z = 0;
+    public static Pose3d ROBOT_TO_QUEST = new Pose3d(0.304, 0, 0, new Rotation3d(Math.toRadians(0), Math.toRadians(32), Math.toRadians(0)));
+    public static Pose3d ROBOT_TO_LIMELIGHT_LEFT = new Pose3d(0, 0.282, 0, Rotation3d.kZero);
+    public static Pose3d ROBOT_TO_LIMELIGHT_RIGHT = new Pose3d(0, -0.282, 0, Rotation3d.kZero);
 
     public static int VISION_BUFFER_SIZE = 1;
 
@@ -113,15 +114,14 @@ public final class Constants {
     public static double ROBOT_STRAFE_KI_MAX = 0;
     public static double ROBOT_STRAFE_KD = 0;
 
-    public static double ROBOT_HEADING_KP = 0.012; // 0.03 seems resonable on the test field
+    public static double ROBOT_HEADING_KP = 0.02;
     public static double ROBOT_HEADING_KI = 0;
     public static double ROBOT_HEADING_KI_MAX = 0;
-    public static double ROBOT_HEADING_KD = 0;
+    public static double ROBOT_HEADING_KD = 0.001;
     // public static double ROBOT_HEADING_KF = 0;
-    public static double ROBOT_HEADING_TOLERANCE_DEG = 2;
+    public static double ROBOT_HEADING_TOLERANCE_DEG = 0.5;
     // public static double ROBOT_HEADING_MAX_OUTPUT = 1;
-
-    public static double FLYWHEEL_MAX_THEORETICAL_RPM = 4000;
+    public static boolean ROBOT_HEADING_PID_TOGGLE = true;
 
     // Interpolation table
     public static double[] FLYWHEEL_SPEED_TABLE = {0.57, 0.595, 0.69, 0.715, 0.73, 0.82, 0.86};
@@ -144,14 +144,128 @@ public final class Constants {
     // When within this many degrees, snap to setpoint and zero velocity.
     public static final double TURRET_ANGLE_TOLERANCE_DEG = 0.5;
     // -------------------------------------------------------------------------------------
+    
+    /*
 
     // Flywheel tuning defaults
     // Default target RPM for flywheel (used as a manual override/starting value)
-    public static final double FLYWHEEL_DEFAULT_TARGET_RPM = 1845.0;
+    // Keep this positive; use `FLYWHEEL_DIRECTION` to invert sign for hardware wiring differences.
+    public static final double FLYWHEEL_DEFAULT_TARGET_RPM = 2500.0;
     // Default flywheel acceleration in RPM per second (used for ramping if implemented)
-    public static final double FLYWHEEL_DEFAULT_ACCEL_RPMS = 20000.0;
+    public static final double FLYWHEEL_DEFAULT_ACCEL_RPMS = 5000.0;
     // Default open-loop start percent for flywheel when controlled by code only (0.0 - 1.0)
     public static final double FLYWHEEL_DEFAULT_START_PERCENT = 0.5; // 50% output
+
+    // Flywheel motor / PID and feedforward tuning constants (used by onboard TalonFX closed-loop)
+    // CAN ID for flywheel TalonFX
+    public static final int FLYWHEEL_MOTOR_CAN_ID = 10; // matches existing TestSubsystem default
+
+    // Closed-loop slot selection
+    public static final int FLYWHEEL_PID_SLOT = 0;
+
+    // Feedforward-ish gains (units used by Phoenix6 API: kV/kA in Volts/(rot/s) and Volts/(rot/s/s),
+    // kS in Volts). Start conservative and tune on the robot/Phoenix Tuner.
+    public static final double FLYWHEEL_kS = 0.25;   // static friction voltage (V)
+    public static final double FLYWHEEL_kV = 0.12;   // volts per rps (V / rps)
+    public static final double FLYWHEEL_kA = 0.00;   // volts per (rps/s) (V / (rps/s))
+
+    // Direction multiplier for flywheel hardware. Set to 1.0 for normal, -1.0 to invert
+    // the commanded velocity/voltage signs if the motor spins the wrong way.
+    // NOTE: keep target RPMs positive in the constants and flip direction here instead
+    // of making the target negative — the subsystem will multiply the commanded
+    // velocity/feedforward by this value.
+    public static final double FLYWHEEL_DIRECTION = -1.0;
+
+    // PID gains for velocity closed-loop (these are in Volt-output PID units used by Phoenix)
+    public static final double FLYWHEEL_kP = 0.17;
+    public static final double FLYWHEEL_kI = 0.0;
+    public static final double FLYWHEEL_kD = 0.0;
+
+    // Motion Magic / Motion profiling defaults (if you later want MotionMagic Velocity)
+    public static final boolean FLYWHEEL_USE_MOTION_MAGIC_VELOCITY = false; // leave false to use basic velocity control
+    public static final double FLYWHEEL_MOTION_ACCEL_RPMS = 2000.0; // RPM/s used by motion magic (convert to rps/s internally)
+    public static final double FLYWHEEL_MOTION_JERK = 0.0; // optional jerk
+
+    // Grouped flywheel tuning constants (single place to find PID + feedforward)
+    // Edit these values when tuning the flywheel. These are the authoritative
+    // values used for on-device TalonFX closed-loop control (kS/kV/kA in Volts,
+    // kP/kI/kD for the velocity PID slot).
+    public static final class Flywheel {
+        // CAN ID for flywheel TalonFX
+        public static final int MOTOR_CAN_ID = 10; // matches existing TestSubsystem default
+
+        // Closed-loop slot selection
+        public static final int PID_SLOT = 0;
+
+        // Feedforward-ish gains (units used by Phoenix6 API: kV/kA in Volts/(rot/s) and Volts/(rot/s/s),
+        // kS in Volts). Start conservative and tune on the robot/Phoenix Tuner.
+        public static final double kS = 0.25;   // static friction voltage (V)
+        public static final double kV = 0.12;   // volts per rps (V / rps)
+        public static final double kA = 0.00;   // volts per (rps/s) (V / (rps/s))
+
+        // PID gains for velocity closed-loop (these are in Volt-output PID units used by Phoenix)
+        public static final double kP = 0.17;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
+
+    // Default target RPM for flywheel (used as a manual override/starting value)
+    // Keep this in the same units as the top-level constant (RPM).
+    public static final double DEFAULT_TARGET_RPM = 1845.0;
+
+    // Default flywheel acceleration in RPM per second (used for ramping if implemented)
+    public static final double DEFAULT_ACCEL_RPMS = 20000.0;
+
+        // Default open-loop start percent for flywheel when controlled by code only (0.0 - 1.0)
+        public static final double DEFAULT_START_PERCENT = 0.5; // 50% output
+
+        // Motion Magic / Motion profiling defaults (if you later want MotionMagic Velocity)
+        public static final boolean USE_MOTION_MAGIC_VELOCITY = false; // leave false to use basic velocity control
+        public static final double MOTION_ACCEL_RPMS = 2000.0; // RPM/s used by motion magic (convert to rps/s internally)
+        public static final double MOTION_JERK = 0.0; // optional jerk
+
+        // theoretical limits (for telemetry/approximation)
+        public static final double MAX_THEORETICAL_RPM = 4000.0;
+    }
+    */
+
+    // -------------------------------------------------------------------------------------
+    // Flywheel tuning defaults (used as Shuffleboard starting values)
+    
+    // Default target RPM
+    public static final double FLYWHEEL_TARGET_RPM = 2650.0;
+
+    // CAN ID for flywheel TalonFX
+    public static final int FLYWHEEL_MOTOR_CAN_ID = 10;
+
+    // Closed-loop slot selection
+    public static final int FLYWHEEL_PID_SLOT = 0;
+    // Motor inversion handled in Talon configuration (not math)
+    public static final boolean FLYWHEEL_INVERTED = true;
+
+    // ---------------- Feedforward (Talon internal) ----------------
+    // Units: Volts, Volts/(rps), Volts/(rps/s)
+    public static final double FLYWHEEL_kS = 0.1;
+    public static final double FLYWHEEL_kV = 0.11;
+    public static final double FLYWHEEL_kA = 0.05;
+    // ---------------- PID (Velocity) ----------------
+    public static final double FLYWHEEL_kP = 0.45;
+    public static final double FLYWHEEL_kI = 0.25;
+    public static final double FLYWHEEL_kD = 0.0;
+
+    // ---------------- Motion Magic Velocity ----------------
+    // These only affect ramp rate
+    public static final boolean FLYWHEEL_USE_MOTION_MAGIC = true;
+
+    public static final double FLYWHEEL_MOTION_ACCEL_RPMS = 5000.0; // RPM/s
+    public static final double FLYWHEEL_MOTION_JERK = 0.0;
+
+    // ---------------- Telemetry / limits ----------------
+    public static final double FLYWHEEL_MAX_THEORETICAL_RPM = 4000.0;
+
+    // Flip this to 1 or -1 if direction is wrong
+    public static final int FLYWHEEL_DIRECTION = -1;
+
+    
 
     // What is the LCD
 	// LCD display line number constants showing class where the line is set.
@@ -175,15 +289,13 @@ public final class Constants {
         public static double kMaxAngularRate = RotationsPerSecond.of(1.0).in(RadiansPerSecond); // 1 rotation per second max angular velocity
 
         // Velocity dead bands applied in SDS code. Times max speed.
-        public static final double  DRIVE_DEADBAND = 0.01, ROTATION_DEADBAND = 0.1;
+        public static final double  DRIVE_DEADBAND = 0.01, ROTATION_DEADBAND = 0.01;
 
         // Factors used to reduce robot max speed to levels desired for lab/demo operation.
         // The split below matches the rotation speed to drive speed. Needs to be tuned for
         // full weight robot.
-        // public static final double kDriveReductionPct = .50; // 50% of max linear speed.
-        // public static final double kRotationReductionPct = .70; // 70% of max rotational speed.
-        public static final double kDriveReductionPct = .20; // 50% of max linear speed.
-        public static final double kRotationReductionPct = .30; // 70% of max rotational speed.
+        public static final double kDriveReductionPct = .50; // 50% of max linear speed.
+        public static final double kRotationReductionPct = .70; // 70% of max rotational speed.
 
         // Factors used to slow robot speed for fine driving.
         public static final double kSlowModeLinearPct = .15; // 15% of max linear speed.
@@ -197,8 +309,4 @@ public final class Constants {
         public static final Pose2d	DEFAULT_STARTING_POSE = new Pose2d(0, 0, Rotation2d.kZero);
         public static final Pose3d	DEFAULT_STARTING_POSE_3D = new Pose3d(0, 0, 0, Rotation3d.kZero);
     }
-
-  //-------------------- No student code above this line ------------------------------------------------------
-
-}
-;
+};
