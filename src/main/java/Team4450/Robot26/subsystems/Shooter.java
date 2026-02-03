@@ -8,17 +8,17 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class Shooter extends SubsystemBase {
     // Requested target (degrees) — set by callers
-    private double requestedAngleDeg = 0.0;
+    private double requestedAngleDeg;
     // Commanded angle we are currently outputting to hardware (degrees)
-    private double commandedAngleDeg = 0.0;
+    private double commandedAngleDeg;
     // Current commanded angular velocity (deg/sec)
-    private double commandedAngularVelocity = 0.0;
+    private double commandedAngularVelocity;
     // Tunable motion parameters (initialized from Constants but editable at runtime)
     // Internals use deg/sec and deg/sec^2. For convenience we expose RPM units on the dashboard
     // and convert to degrees internally (1 RPM = 6 deg/sec).
-    private double turretMaxVelDegPerSec = TURRET_MAX_VELOCITY_DEG_PER_SEC;
-    private double turretMaxAccelDegPerSec2 = TURRET_MAX_ACCELERATION_DEG_PER_SEC2;
-    private boolean turretAccelEnabled = TURRET_ACCELERATION_ENABLED;
+    private double turretMaxVelDegPerSec;
+    private double turretMaxAccelDegPerSec2;
+    private boolean turretAccelEnabled;
     // Flywheel runtime tunables (RPM and RPM/s units on dashboard)
     // (flywheel is currently controlled by TestSubsystem; no dashboard-driven flywheel tunables here)
     
@@ -38,6 +38,9 @@ public class Shooter extends SubsystemBase {
         this.requestedAngleDeg = 0.0;
         this.commandedAngularVelocity = 0.0;
         this.drivebase = drivebase;
+        this.turretMaxVelDegPerSec = TURRET_MAX_VELOCITY_DEG_PER_SEC;
+        this.turretMaxAccelDegPerSec2 = TURRET_MAX_ACCELERATION_DEG_PER_SEC2;
+        this.turretAccelEnabled = TURRET_ACCELERATION_ENABLED;
 
         // Publish tuning values to SmartDashboard so they can be changed while testing.
         // Publish both RPM-based and internal values for clarity/editing.
@@ -50,17 +53,17 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-    // Read potentially-updated tuning values from SmartDashboard (RPM-based entries).
-    double hudTurretMaxVelRpm = SmartDashboard.getNumber("Turret/MaxVelocityRPM", TURRET_DEFAULT_MAX_VELOCITY_RPM);
-    double hudTurretMaxAccelRpms = SmartDashboard.getNumber("Turret/MaxAccelerationRPMperSec", TURRET_DEFAULT_MAX_ACCEL_RPMS);
-    turretAccelEnabled = SmartDashboard.getBoolean("Turret/AccelEnabled", turretAccelEnabled);
+        // Read potentially-updated tuning values from SmartDashboard (RPM-based entries).
+        double hudTurretMaxVelRpm = SmartDashboard.getNumber("Turret/MaxVelocityRPM", TURRET_DEFAULT_MAX_VELOCITY_RPM);
+        double hudTurretMaxAccelRpms = SmartDashboard.getNumber("Turret/MaxAccelerationRPMperSec", TURRET_DEFAULT_MAX_ACCEL_RPMS);
+        turretAccelEnabled = SmartDashboard.getBoolean("Turret/AccelEnabled", turretAccelEnabled);
 
 
-    // Convert RPM-based dashboard values to internal deg/sec units: 1 RPM = 360 deg / 60 sec = 6 deg/sec
-    turretMaxVelDegPerSec = hudTurretMaxVelRpm * 6.0;
-    turretMaxAccelDegPerSec2 = hudTurretMaxAccelRpms * 6.0;
+        // Convert RPM-based dashboard values to internal deg/sec units: 1 RPM = 360 deg / 60 sec = 6 deg/sec
+        turretMaxVelDegPerSec = hudTurretMaxVelRpm * 6.0;
+        turretMaxAccelDegPerSec2 = hudTurretMaxAccelRpms * 6.0;
 
-    // Flywheel is controlled by TestSubsystem via Constants; no dashboard reads here.
+        // Flywheel is controlled by TestSubsystem via Constants; no dashboard reads here.
 
         // Update the acceleration-limited motion profile for the turret every robot cycle.
         updateMotion(ROBOT_PERIOD_SEC);
@@ -80,7 +83,7 @@ public class Shooter extends SubsystemBase {
 
         // Calculate hood angle and angle to face goal
         double hoodAngle = Math.atan(verticalVel / horizonalVel);
-        double angleToFaceGoal = Math.atan2(yDiff, xDiff);
+        //double angleToFaceGoal = Math.atan2(yDiff, xDiff); I think this is done in a different file
         
         // Calculate flywheel RPM needed
         double initialVel = Math.sqrt(Math.pow((verticalVel), 2) * Math.pow((horizonalVel), 2));
@@ -193,10 +196,10 @@ public class Shooter extends SubsystemBase {
         double error = wrapAngleDeg(requestedAngleDeg - commandedAngleDeg);
 
         // Desired velocity to close the error in one iteration (may be large); clamp to max velocity
-    double desiredVel = clamp(error / dt, -turretMaxVelDegPerSec, turretMaxVelDegPerSec);
+        double desiredVel = clamp(error / dt, -turretMaxVelDegPerSec, turretMaxVelDegPerSec);
 
         // Limit acceleration: compute allowable change in velocity
-    double maxDeltaV = turretMaxAccelDegPerSec2 * dt;
+        double maxDeltaV = turretMaxAccelDegPerSec2 * dt;
         double deltaV = desiredVel - commandedAngularVelocity;
         if (deltaV > maxDeltaV) deltaV = maxDeltaV;
         if (deltaV < -maxDeltaV) deltaV = -maxDeltaV;
