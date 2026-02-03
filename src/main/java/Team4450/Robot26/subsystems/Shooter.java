@@ -1,12 +1,35 @@
 package Team4450.Robot26.subsystems;
 
 import static Team4450.Robot26.Constants.*;
+
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import Team4450.Robot26.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import com.ctre.phoenix6.CANBus;
 
 public class Shooter extends SubsystemBase {
+
+    // This motor is a Falcon 500
+    private final TalonFX flywheelMotor_TopLeft = new TalonFX(Constants.FLYWHEEL_MOTOR_TOP_LEFT_CAN_ID, new CANBus(Constants.CANIVORE_NAME));
+    // This motor is a Falcon 500
+    private final TalonFX flywheelMotor_TopRight = new TalonFX(Constants.FLYWHEEL_MOTOR_TOP_RIGHT_CAN_ID, new CANBus(Constants.CANIVORE_NAME));
+    // This motor is a Falcon 500
+    private final TalonFX flywheelMotor_BottomLeft = new TalonFX(Constants.FLYWHEEL_MOTOR_BOTTOM_LEFT_CAN_ID, new CANBus(Constants.CANIVORE_NAME));
+    // This motor is Falcon 500
+    private final TalonFX flywheelMotor_BottomRight = new TalonFX(Constants.FLYWHEEL_MOTOR_BOTTOM_RIGHT_CAN_ID, new CANBus(Constants.CANIVORE_NAME));
+    // This motor is a Kraken x60, change CAN ID
+    private final TalonFX hoodRollerLeft = new TalonFX(Constants.HOOD_MOTOR_LEFT_CAN_ID, new CANBus(Constants.CANIVORE_NAME));
+    // This motor is a Kraken x60, change CAN ID
+    private final TalonFX hoodRollerRight = new TalonFX(Constants.HOOD_MOTOR_RIGHT_CAN_ID, new CANBus(Constants.CANIVORE_NAME));
+    // This motor is a Kraken x44, change CAN ID
+    private final TalonFX rollerLeft = new TalonFX(Constants.ROLLER_MOTOR_LEFT_CAN_ID, new CANBus(Constants.CANIVORE_NAME));
+    // This motor is a Kraken x44, change CAN ID
+    private final TalonFX rollerRight = new TalonFX(Constants.ROLLER_MOTOR_RIGHT_CAN_ID, new CANBus(Constants.CANIVORE_NAME));
+
     // Requested target (degrees) — set by callers
     private double requestedAngleDeg = 0.0;
     // Commanded angle we are currently outputting to hardware (degrees)
