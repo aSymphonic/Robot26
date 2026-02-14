@@ -1,31 +1,29 @@
 package Team4450.Robot26.subsystems;
 
 import Team4450.Robot26.Constants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.CANBus;
 
 public class Hopper extends SubsystemBase {
-    private final TalonFX hopperMotor = new TalonFX(Constants.HOPPER_MOTOR_CAN_ID);
-
-    private double targetRpm = 0.0;
+    private final TalonFX hopperMotor = new TalonFX(Constants.HOPPER_MOTOR_CAN_ID, new CANBus(Constants.CANIVORE_NAME));
 
     public Hopper() {
         // Configure motor neutral mode
-        hopperMotor.setNeutralMode(NeutralModeValue.Brake);
+        hopperMotor.setNeutralMode(NeutralModeValue.Coast);
+
+        SmartDashboard.putNumber("Hopper Power", Constants.HOPPER_MOTOR_POWER);
+        hopperMotor.set(0);
     }
 
-    public void setTargetRpm(double rpm) {
-        this.targetRpm = rpm;
-        double targetRps = targetRpm / 60.0; // Convert RPM to RPS
-        hopperMotor.set(targetRps);
-    }
-
-    public double getTargetRpm() {
-        return this.targetRpm;
+    public void start() {
+        double power = SmartDashboard.getNumber("Hopper Power", Constants.HOPPER_MOTOR_POWER);
+        hopperMotor.set(power);
     }
 
     public void stop() {
-        setTargetRpm(0.0);
+        hopperMotor.set(0);
     }
 }

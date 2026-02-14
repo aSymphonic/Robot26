@@ -61,6 +61,8 @@ public final class Constants {
     public static int FLYWHEEL_MOTOR_BOTTOM_RIGHT_CAN_ID = 16;
     public static int FLYWHEEL_MOTOR_BOTTOM_LEFT_CAN_ID = 15;
 
+    public static boolean[] FLYWHEEL_MOTOR_CLOCKWISE = {false, true, false, true};
+
     public static int HOOD_MOTOR_LEFT_CAN_ID = 17;
     public static int HOOD_MOTOR_RIGHT_CAN_ID = 18;
 
@@ -181,15 +183,14 @@ public final class Constants {
     // Flywheel tuning defaults (used as Shuffleboard starting values)
     
     // Default target RPM
-    public static final double FLYWHEEL_TARGET_RPM = 2650.0;
+    // public static final double FLYWHEEL_TARGET_RPM = 2650.0;
+    public static final double FLYWHEEL_TARGET_RPM = 0;
 
     // CAN ID for flywheel TalonFX
     public static final int FLYWHEEL_MOTOR_CAN_ID = -1;
 
     // Closed-loop slot selection
     public static final int FLYWHEEL_PID_SLOT = 0;
-    // Motor inversion handled in Talon configuration (not math)
-    public static final boolean FLYWHEEL_INVERTED = true;
 
     // ---------------- Feedforward (Talon internal) ----------------
     // Units: Volts, Volts/(rps), Volts/(rps/s)
@@ -203,7 +204,7 @@ public final class Constants {
 
     // ---------------- Motion Magic Velocity ----------------
     // These only affect ramp rate
-    public static final boolean FLYWHEEL_USE_MOTION_MAGIC = true;
+    // public static final boolean FLYWHEEL_USE_MOTION_MAGIC = true;
 
     public static final double FLYWHEEL_MOTION_ACCEL_RPMS = 5000.0; // RPM/s
     public static final double FLYWHEEL_MOTION_JERK = 0.0;
@@ -213,6 +214,11 @@ public final class Constants {
 
     // Flip this to 1 or -1 if direction is wrong
     public static final int FLYWHEEL_DIRECTION = -1;
+
+    // Hopper motor constants
+    public static final int HOPPER_MOTOR_CAN_ID = 12; // Example CAN ID for the Kraken X60 motor
+    public static final double HOPPER_MOTOR_SPEED_RPM = 1000.0; // Default speed in RPM
+    public static final double HOPPER_MOTOR_POWER = 0.2;
 
     // What is the LCD
 	// LCD display line number constants showing class where the line is set.
@@ -256,8 +262,4 @@ public final class Constants {
         public static final Pose2d	DEFAULT_STARTING_POSE = new Pose2d(0, 0, Rotation2d.kZero);
         public static final Pose3d	DEFAULT_STARTING_POSE_3D = new Pose3d(0, 0, 0, Rotation3d.kZero);
     }
-
-    // Hopper motor constants
-    public static final int HOPPER_MOTOR_CAN_ID = 11; // Example CAN ID for the Kraken X60 motor
-    public static final double HOPPER_MOTOR_SPEED_RPM = 1000.0; // Default speed in RPM
 };
