@@ -83,6 +83,8 @@ public class Shooter extends SubsystemBase {
     private double sd_kP, sd_kI, sd_kD;
     private double sd_kS, sd_kV, sd_kA;
 
+    private final TalonFX flywheelMotor = new TalonFX(Constants.FLYWHEEL_MOTOR_CAN_ID);
+
     public Shooter(Drivebase drivebase) {
         // initialize commanded angle to whatever a reasonable default is
         this.drivebase = drivebase;

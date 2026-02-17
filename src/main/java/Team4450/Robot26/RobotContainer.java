@@ -37,6 +37,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -313,16 +315,16 @@ public class RobotContainer {
 		 // 	.onTrue(new InstantCommand(testSubsystem::stop));
 
 		 new Trigger(() -> driverController.getAButton())
-		 	.onTrue(new InstantCommand(shooter::startInfeed))
-		 	.onTrue(new InstantCommand(shooter::startFlywheel));
+		 	//.onTrue(new InstantCommand(shooter::startInfeed))
+		 	//.onTrue(new InstantCommand(shooter::startFlywheel));
 		 	// .onTrue(new InstantCommand(intake::startIntake));
-		 	// .onTrue(new InstantCommand(hopper::start));
+		 	 .onTrue(new InstantCommand(hopper::start));
 
 		 new Trigger(() -> driverController.getBButton())
-		 	.onTrue(new InstantCommand(shooter::stopInfeed))
-		 	.onTrue(new InstantCommand(shooter::stopFlywheel));
+		 	//.onTrue(new InstantCommand(shooter::stopInfeed))
+		 	//.onTrue(new InstantCommand(shooter::stopFlywheel));
 		 	// .onTrue(new InstantCommand(intake::stopIntake));
-		 	// .onTrue(new InstantCommand(hopper::stop));
+		 	 .onTrue(new InstantCommand(hopper::stop));
             
 		 new Trigger(() -> driverController.getYButton())
 		 	.onTrue(new InstantCommand(shooter::stopHood));

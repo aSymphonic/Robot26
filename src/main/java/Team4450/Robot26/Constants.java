@@ -198,9 +198,9 @@ public final class Constants {
     public static final double FLYWHEEL_kV = 0.11;
     public static final double FLYWHEEL_kA = 0.05;
     // ---------------- PID (Velocity) ----------------
-    public static final double FLYWHEEL_kP = 0.45;
+    public static final double FLYWHEEL_kP = 0.55;
     public static final double FLYWHEEL_kI = 0.25;
-    public static final double FLYWHEEL_kD = 0.0;
+    public static final double FLYWHEEL_kD = 0.0;   
 
     // ---------------- Motion Magic Velocity ----------------
     // These only affect ramp rate
