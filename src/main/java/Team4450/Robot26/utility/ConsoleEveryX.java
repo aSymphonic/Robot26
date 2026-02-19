@@ -13,7 +13,7 @@ public class ConsoleEveryX {
         this.x = 0;
         this.targetX = x;
         this.enabled = false;
-        this.id = id;
+        this.id = String.format("ConsoleEveryX/%s", id);
         SmartDashboard.putBoolean(id, enabled);
     }
 
