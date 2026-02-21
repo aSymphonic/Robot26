@@ -22,9 +22,7 @@ public class LinkedMotors {
      */
     public void setPower(double power) {
         this.masterMotor.set(power);
-        for (TalonFX slaveMotor : this.slaveMotors) {
-            slaveMotor.set(power);
-        }
+        this.slaveMotors.get(0).setControl(new Follower(this.masterMotor.getDeviceID(), MotorAlignmentValue.Opposed));
     }
 
     /**

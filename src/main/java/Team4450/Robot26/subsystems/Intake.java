@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putBoolean("Intake can Spin", canSpin);
         SmartDashboard.putNumber("Pivit Position", 0);
 
-        SmartDashboard.putNumber("Intake Target RPM", 1200);
+        SmartDashboard.putNumber("Intake Target RPM", Constants.INTAKE_DEFAULT_TARGET_RPM);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class Intake extends SubsystemBase {
             SmartDashboard.putNumber("Intake RPM", getIntakeRPM());
 
             if (this.runIntake) {
-                setIntakeRPM(SmartDashboard.getNumber("Intake Target RPM", 1200));
+                setIntakeRPM(SmartDashboard.getNumber("Intake Target RPM", Constants.INTAKE_DEFAULT_TARGET_RPM));
             }
         }
     }
@@ -94,6 +94,12 @@ public class Intake extends SubsystemBase {
     public void startIntake() {
         if (canSpin) {
             this.runIntake = true;
+        }
+    }
+
+    public void startIntakeSlow() {
+        if (canSpin) {
+            intakeMotors.setPower(0.1);
         }
     }
 

@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
@@ -115,6 +116,8 @@ public class Shooter extends SubsystemBase {
             // Neutral + inversion
             cfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
+            cfg.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.SHOOTER_FLYWHEEL_CURRENT_LIMIT);
+
             if (Constants.FLYWHEEL_MOTOR_CLOCKWISE[i]) {
                 cfg.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
             } else {
@@ -165,7 +168,8 @@ public class Shooter extends SubsystemBase {
         sdInit = true;
 
         SmartDashboard.putNumber("Hood Power", 0.05);
-        SmartDashboard.putNumber("Infeed Target RPM", 1200);
+        SmartDashboard.putNumber("Infeed Target RPM", Constants.INFEED_DEFAULT_TARGET_RPM);
+        SmartDashboard.putNumber("Infeed Measured RPM", getInfeedRPM());
     }
 
     @Override
@@ -209,6 +213,8 @@ public class Shooter extends SubsystemBase {
 
             for (int i = 0; i < flywheelMotors.getTotalMotors(); i++) {
                 TalonFXConfiguration cfg = new TalonFXConfiguration();
+
+                cfg.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.SHOOTER_FLYWHEEL_CURRENT_LIMIT);
 
                 // Neutral + inversion
                 cfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -257,7 +263,15 @@ public class Shooter extends SubsystemBase {
                     new MotionMagicVelocityVoltage(targetRPS)
                             .withSlot(Constants.FLYWHEEL_PID_SLOT);
 
+
+            
             flywheelMotors.applyControl(req, true);
+            flywheelMotorTopLeft.setControl(req);
+            flywheelMotorTopRight
+
+            this.slaveMotors.get(0).setControl(new Follower(this.masterMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+            this.slaveMotors.get(1).setControl(new Follower(this.masterMotor.getDeviceID(), MotorAlignmentValue.Aligned));
+            this.slaveMotors.get(2).setControl(new Follower(this.masterMotor.getDeviceID(), MotorAlignmentValue.Opposed));
         } else {
             targetRPS = 0;
             CoastOut req =
@@ -279,8 +293,10 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Infeed RPM", getInfeedRPM());
         
         if (this.runInfeed) {
-            setInfeedRPM(SmartDashboard.getNumber("Infeed Target RPM", 1200));
+            setInfeedRPM(SmartDashboard.getNumber("Infeed Target RPM", Constants.INFEED_DEFAULT_TARGET_RPM));
         }
+
+        SmartDashboard.putNumber("Flywheel Current Draw", getFlywheelCurrent());
     }
 
     public void updateLaunchValues(boolean interpolate){

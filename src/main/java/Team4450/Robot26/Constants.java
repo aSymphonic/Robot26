@@ -71,6 +71,8 @@ public final class Constants {
 
     public static int SHOOTER_UPPER_BEAM_BREAK_PORT = 3;
 
+    public static int SHOOTER_FLYWHEEL_CURRENT_LIMIT = 40;
+
     public static double HOOD_TOLERENCE_MOTOR_ROTATIONS = 0.02;
     public static double HOOD_TOLERENCE_DEGREES = 5;
     public static double HOOD_GEAR_RATIO = 3/8;
@@ -224,15 +226,13 @@ public final class Constants {
     public static final double HOPPER_MOTOR_SPEED_RPM = 1000.0; // Default speed in RPM
     public static final double HOPPER_MOTOR_POWER = 1;
 
+    public static final int INTAKE_DEFAULT_TARGET_RPM = 3600;
     // PID constants for Intake
-    public static final double INTAKE_kP = 0.8;
-    public static final double INTAKE_kI = 0.0;
-    public static final double INTAKE_kD = 0.0;
+    public static final double INTAKE_kP = 0.4;
 
+    public static final int INFEED_DEFAULT_TARGET_RPM = 4000;
     // PID constants for Shooter Infeed
-    public static final double INFEED_kP = 0.8;
-    public static final double INFEED_kI = 0.0;
-    public static final double INFEED_kD = 0.0;
+    public static final double INFEED_kP = 0.4;
 
     // What is the LCD
 	// LCD display line number constants showing class where the line is set.
