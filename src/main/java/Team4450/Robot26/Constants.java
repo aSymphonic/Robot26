@@ -79,6 +79,8 @@ public final class Constants {
     public static double HOOD_TOLERENCE_DEGREES = 5;
     public static double HOOD_GEAR_RATIO = 3/8; //Make sure to change this constant in Shooter class for the hood angle calculation
     public static double HOOD_DOWN_ANGLE_DEGREES = 15;
+
+    public static double SHOOTER_HOOD_TOLERENCE_MOTOR_RAIDIANS = 0.4;
     
     // Intake Constants
     public static int INTAKE_MOTOR_PIVIT_CAN_ID = 9;
@@ -170,22 +172,6 @@ public final class Constants {
     public static double[] FLYWHEEL_SPEED_TABLE = {4600, 3875, 3500, 3738, 4275, 4920, 5160}; // Converted from percentages to RPM
     public static double[] FLYWHEEL_SPEED_DISTANCE_TABLE = {4.091, 3.443, 1.845, 3.264, 103, 127, 152};
     public static double[] FUEL_AIR_TIME_TABLE_SEC = {0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6};
-
-    // ---------------- Turret motion profiling constants ---------------------------------
-    // Turret defaults (internal units are degrees/sec and degrees/sec^2).
-    // These are used as defaults; the runtime code exposes RPM-based tunables for convenience.
-    // Max angular velocity for turret (degrees per second). Tune to your hardware limits.
-    public static final double TURRET_MAX_VELOCITY_DEG_PER_SEC = 180.0;
-    // Max angular acceleration for turret (degrees per second squared). Tune to your hardware limits.
-    public static final double TURRET_MAX_ACCELERATION_DEG_PER_SEC2 = 360.0;
-    // Default turret velocity/accel expressed in RPM units for dashboard convenience.
-    // 1 rotation = 360 degrees, 1 RPM = 6 deg/sec
-    public static final double TURRET_DEFAULT_MAX_VELOCITY_RPM = TURRET_MAX_VELOCITY_DEG_PER_SEC / 6.0; // 30 RPM
-    public static final double TURRET_DEFAULT_MAX_ACCEL_RPMS = TURRET_MAX_ACCELERATION_DEG_PER_SEC2 / 6.0; // 60 RPM/s
-    // Enable/disable acceleration smoothing (true = enabled)
-    public static final boolean TURRET_ACCELERATION_ENABLED = true;
-    // When within this many degrees, snap to setpoint and zero velocity.
-    public static final double TURRET_ANGLE_TOLERANCE_DEG = 0.5;
 
     // -------------------------------------------------------------------------------------
     // Flywheel tuning defaults (used as Shuffleboard starting values)
