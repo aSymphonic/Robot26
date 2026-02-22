@@ -402,7 +402,7 @@ public class Shooter extends SubsystemBase {
         double currentDistance;
 
         for (int i = FLYWHEEL_SPEED_DISTANCE_TABLE.length - 2; i > 0; i--){
-            currentDistance = FLYWHEEL_SPEED_TABLE[i];
+            currentDistance = FLYWHEEL_SPEED_DISTANCE_TABLE[i];
             if(currentDistance > distToGoal){
                 if (currentDistance <= higherPoint) {
                     higherPoint = currentDistance;
@@ -423,7 +423,7 @@ public class Shooter extends SubsystemBase {
         return linearInterpolate(lowerSpeed, higherSpeed, (distToGoal - lowerPoint) / (higherPoint - lowerPoint));
     }
 
-        public double interpolateHoodByDistance(double distToGoal) {
+    public double interpolateHoodByDistance(double distToGoal) {
         
         double lowerPoint = FLYWHEEL_SPEED_DISTANCE_TABLE[0];
         int lowerPointIndex = 0;
