@@ -153,6 +153,17 @@ public class Shooter extends SubsystemBase {
         this.infeedMotorLeft.getConfigurator().apply(infeedCFG);
         this.infeedMotorRight.getConfigurator().apply(infeedCFG);
 
+        TalonFXConfiguration hoodCFG = new TalonFXConfiguration();
+
+        // Neutral + inversion
+        hoodCFG.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        hoodCFG.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.SHOOTER_HOOD_CURRENT_LIMIT);
+        hoodCFG.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+        this.hoodLeft.getConfigurator().apply(hoodCFG);
+        this.hoodRight.getConfigurator().apply(hoodCFG);
+
+
         SmartDashboard.putNumber("Hood Target Position", 0);
 
         SmartDashboard.putNumber("Flywheel/TargetRPM", Constants.FLYWHEEL_TARGET_RPM);
@@ -218,7 +229,7 @@ public class Shooter extends SubsystemBase {
 
         setHoodPosition(SmartDashboard.getNumber("Hood Position", hoodMotorPosition));
 
-        SmartDashboard.putNumber("Hood Angle", getHoodAngleRadians());
+        SmartDashboard.putNumber("Hood Angle", getHoodMotorAngleRadians());
         SmartDashboard.putNumber("Hood Motor Position", getHoodMotorPosition());
 
         // Apply only if changed
@@ -426,10 +437,39 @@ public class Shooter extends SubsystemBase {
         return ((motorPosition * Constants.HOOD_GEAR_RATIO * 360) + Constants.HOOD_DOWN_ANGLE_DEGREES);
     }
 
-    public void setHoodPosition(double pos){
-        hoodLeft.setPosition(pos);
-        hoodRight.setPosition(pos);
+    public void setHoodPosition(double pos) {
+        if (getHoodMotorAngleRadians() > pos) {
+            hoodDown();
+        } else if (getHoodMotorAngleRadians() < pos) {
+            hoodUp();
+        } else {
+            stopHood();
+        }
     }
+
+    public void hoodUp() {
+        if (canHood) {
+            double power = SmartDashboard.getNumber("Hood Power", 0.05);
+            this.hoodLeft.set(power);
+            this.hoodRight.setControl(new Follower(this.hoodLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+        }
+    }
+
+    public void hoodDown() {
+        if (canHood) {
+            double power = SmartDashboard.getNumber("Hood Power", 0.05);
+            this.hoodLeft.set(-power);
+            this.hoodRight.setControl(new Follower(this.hoodLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+        }
+    }
+
+    public void stopHood() {
+        if (canHood) {
+            this.hoodLeft.set(0);
+            this.hoodRight.setControl(new Follower(this.hoodLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+        }
+    }
+    
 
     public void startFlywheel() {
         this.flywheelEnabled = true;
@@ -506,42 +546,12 @@ public class Shooter extends SubsystemBase {
         return infeedMotorRight.getSupplyCurrent(true).getValueAsDouble();
     }
 
-    public void setHoodPower(double power){
-        if (canHood) {
-            this.hoodLeft.set(power);
-            this.hoodRight.set(power);
-        }
-    }
-
-    public void hoodUp() {
-        if (canHood) {
-            double power = SmartDashboard.getNumber("Hood Power", 0.05);
-            this.hoodLeft.set(power);
-            this.hoodRight.set(power);
-        }
-    }
-
-    public void hoodDown() {
-        if (canHood) {
-            double power = SmartDashboard.getNumber("Hood Power", 0.05);
-            this.hoodLeft.set(-power);
-            this.hoodRight.set(-power);
-        }
-    }
-
-    public void stopHood() {
-        if (canHood) {
-            this.hoodLeft.set(0);
-            this.hoodRight.set(0);
-        }
-    }
-    
     // The position input is between 0 and 1 with 0 being up and 1 being down
     public void setHoodMotorPosition(double position) {
         hoodTargetMotorPosition = position;
     }
 
-    public double getHoodAngleRadians() {
+    public double getHoodMotorAngleRadians() {
         return (hoodLeft.getPosition(true).getValueAsDouble() - this.hoodRotationOffset);
     }
 
