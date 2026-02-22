@@ -68,8 +68,6 @@ public class Shooter extends SubsystemBase {
     //Hood Rotation Offset
     private double hoodRotationOffset;
 
-    private Drivebase drivebase;
-
     DigitalInput beamBreak;
 
     // Constants for launch calculations
@@ -92,9 +90,7 @@ public class Shooter extends SubsystemBase {
     private double sd_kP, sd_kI, sd_kD;
     private double sd_kS, sd_kV, sd_kA;
 
-    public Shooter(Drivebase drivebase) {
-        this.drivebase = drivebase;
-
+    public Shooter() {
         this.canFlywheel = flywheelMotorTopLeft.isConnected() && flywheelMotorTopRight.isConnected() && flywheelMotorBottomLeft.isConnected() && flywheelMotorBottomRight.isConnected();
         this.canHood = hoodLeft.isConnected() && hoodRight.isConnected();
         this.canInfeed = infeedMotorLeft.isConnected() && infeedMotorRight.isConnected();
@@ -184,10 +180,10 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         // Flywheel is controlled by TestSubsystem via Constants; no dashboard reads here.
         
-        //This line should be all that is needed when the flywheel should be spun up
-        //updateLaunchValues(true);
+        // This line should be all that is needed when the flywheel should be spun up
+        updateLaunchValues(true);
 
-        //Update the beam break sensors
+        // Update the beam break sensors
         SmartDashboard.putBoolean("Beam Break", beamBreak.get());
 
         hoodCurrentAngleMotorPosition = hoodLeft.getPosition().getValueAsDouble();
@@ -309,9 +305,11 @@ public class Shooter extends SubsystemBase {
 
     public void updateLaunchValues(boolean interpolate){
         // Calculate distance to goal & diffs
-        double xDiff = getGoalPose().getX() - drivebase.getPose().getX();
-        double yDiff = getGoalPose().getY() - drivebase.getPose().getY();
+        double xDiff = getGoalPose().getX() - RobotContainer.drivebase.getPose().getX();
+        double yDiff = getGoalPose().getY() - RobotContainer.drivebase.getPose().getY();
         double distToGoal = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+
+        SmartDashboard.putNumber("Robot Distance", distToGoal);
         
         // Chose how to get the flywheel speed
         if (interpolate){
@@ -360,8 +358,8 @@ public class Shooter extends SubsystemBase {
 
     public double getAngleToFaceGoalDegrees(Pose2d robotPosition) {
         // Find the difference betweeen the robot and the goal
-        double xDiff = getGoalPose().getX() - drivebase.getPose().getX();
-        double yDiff = getGoalPose().getY() - drivebase.getPose().getY();
+        double xDiff = getGoalPose().getX() - RobotContainer.drivebase.getPose().getX();
+        double yDiff = getGoalPose().getY() - RobotContainer.drivebase.getPose().getY();
 
         // use atan2 to get teh correct angle to face goal & convert to degrees
         double angleToFaceGoal = Math.toDegrees(Math.atan(yDiff / xDiff));
