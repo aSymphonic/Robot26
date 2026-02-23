@@ -1,0 +1,11 @@
+Fix the flywheel amps
+Fix the Flywheel pid for bang bang
+Fix the hood onto motion magic
+Put the pivit onto motion magic
+Clear out old hood stuff
+Fix pathplanner and swaping betweeen the two sides
+other stuff
+One Button to run the flywheel and the tracking and the hopper stuff but only when the flywheel hits a correct speed
+Disable driving when shooting (for now)
+Flywheel interpolation at the shop
+Hub tracking ignore velocity

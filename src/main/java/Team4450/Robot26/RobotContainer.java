@@ -373,9 +373,9 @@ public class RobotContainer {
     //
     new Trigger(() -> driverController.getLeftTrigger())
         .onTrue(new InstantCommand(shooter::startFlywheel))
-        .onTrue(new InstantCommand(drivebase::toggleHubTracking))
-        .onFalse(new InstantCommand(shooter::stopFlywheel))
-        .onFalse(new InstantCommand(drivebase::toggleHubTracking));
+        // .onTrue(new InstantCommand(drivebase::toggleHubTracking))
+        .onFalse(new InstantCommand(shooter::stopFlywheel));
+        // .onFalse(new InstantCommand(drivebase::toggleHubTracking));
 
     new Trigger(() -> driverController.getRightTrigger())
         .onTrue(new InstantCommand(shooter::startInfeed))
