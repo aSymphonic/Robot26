@@ -379,7 +379,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(shooter::startFlywheel))
         // .onTrue(new InstantCommand(drivebase::toggleHubTracking))
         .onFalse(new InstantCommand(shooter::stopFlywheel));
-    // .onFalse(new InstantCommand(drivebase::toggleHubTracking));
+        // .onFalse(new InstantCommand(drivebase::toggleHubTracking));
 
     new Trigger(() -> driverController.getRightTrigger())
         .onTrue(new InstantCommand(shooter::startInfeed))
@@ -393,22 +393,12 @@ public class RobotContainer {
     new Trigger(() -> driverController.getBButton())
         .onTrue(new InstantCommand(intake::stopIntake));
 
-    /*
-     * new Trigger(() -> driverController.getYButton())
-     * .onTrue(new InstantCommand(hopper::start))
-     * .onFalse(new InstantCommand(hopper::stop));
-     */
+    /*new Trigger(() -> driverController.getYButton())
+        .onTrue(new InstantCommand(hopper::start))
+        .onFalse(new InstantCommand(hopper::stop));*/
 
     new Trigger(() -> driverController.getXButton())
         .onTrue(new InstantCommand(drivebase::toggleHubTracking));
-
-    new Trigger(() -> driverController.getLeftBumper())
-        .onTrue(new InstantCommand(shooter::hoodUp))
-        .onFalse(new InstantCommand(shooter::stopHood));
-
-    new Trigger(() -> driverController.getRightBumper())
-        .onTrue(new InstantCommand(shooter::hoodDown))
-        .onFalse(new InstantCommand(shooter::stopHood));
   }
 
   /**
