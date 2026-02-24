@@ -7,24 +7,34 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class StartIntake extends Command {
   private Intake intake;
 
+  private State state;
+
+  private static enum State {
+    MOVING, INTAKE, STOP
+  };
+
   public StartIntake(Intake intake) {
     this.intake = intake;
   }
 
   public void initialize() {
-    SmartDashboard.putBoolean("Intake Running?", false);
+    state = State.MOVING;
+
   }
 
   public void execute() {
+    state = State.INTAKE;
     intake.startIntakeSlow();
     end();
   }
 
   public boolean isFinished() {
-    return true;
+    return state == State.STOP;
+
   }
 
   public void end() {
-    SmartDashboard.putBoolean("Intake Running?", true);
+    SmartDashboard.putString("Done with starting intake?", "Yup");
+
   }
 }

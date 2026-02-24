@@ -38,7 +38,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "",
+      "name": "Shoot(temporary)",
       "waypointRelativePos": 0.19928186714542162,
       "endWaypointRelativePos": null,
       "command": null

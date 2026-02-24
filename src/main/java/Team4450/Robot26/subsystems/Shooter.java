@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase {
     private boolean canHood;
     private boolean canInfeed;
 
-  private boolean runInfeed;
+    private boolean runInfeed;
 
     // The format of this value is in rotations of the pivit motor
     private double hoodMotorPosition;
@@ -60,27 +60,27 @@ public class Shooter extends SubsystemBase {
     //Hood Rotation Offset
     private double hoodRotationOffset;
 
-  DigitalInput beamBreak;
+    DigitalInput beamBreak;
 
-  // Constants for launch calculations
-  private static final double GRAVITY = 9.81;
-  private static final double DESIRED_MAX_HEIGHT = 2.5; // meters (8.2 feet)
-  private static final double GOAL_HEIGHT = 1.8288; // meters (6 feet)
-  private static final double FLYWHEEL_HEIGHT = 0.5334; // meters (21 inches)
-  private static final double CONVERSION_FACTOR_MPS_TO_RPM = 10000 / 47.93;
+    // Constants for launch calculations
+    private static final double GRAVITY = 9.81;
+    private static final double DESIRED_MAX_HEIGHT = 2.5; // meters (8.2 feet)
+    private static final double GOAL_HEIGHT = 1.8288; // meters (6 feet)
+    private static final double FLYWHEEL_HEIGHT = 0.5334; // meters (21 inches)
+    private static final double CONVERSION_FACTOR_MPS_TO_RPM = 10000 / 47.93;
 
-  private double targetRPM = 0.0;
-  private double currentRPM = 0.0;
+    private double targetRPM = 0.0;
+    private double currentRPM = 0.0;
 
-  private final double maxRpm = Constants.FLYWHEEL_MAX_THEORETICAL_RPM;
+    private final double maxRpm = Constants.FLYWHEEL_MAX_THEORETICAL_RPM;
 
-  public boolean flywheelEnabled = false; // Button-controlled enable
+    public boolean flywheelEnabled = false; // Button-controlled enable
 
-  // Shuffleboard cached values
-  private boolean sdInit = false;
+    // Shuffleboard cached values
+    private boolean sdInit = false;
 
-  private double sd_kP, sd_kI, sd_kD;
-  private double sd_kS, sd_kV, sd_kA;
+    private double sd_kP, sd_kI, sd_kD;
+    private double sd_kS, sd_kV, sd_kA;
 
     private Drivebase drivebase;
 
@@ -93,126 +93,54 @@ public class Shooter extends SubsystemBase {
 
         this.hoodMotorPosition = 0;
 
-    this.flywheelCurrentRPM = 0;
-    this.flywheelTargetRPM = 0;
-    this.flywheelError = 0;
+        this.flywheelCurrentRPM = 0;
+        this.flywheelTargetRPM = 0;
+        this.flywheelError = 0;
 
         this.hoodRotationOffset = this.hoodLeft.getPosition(true).getValueAsDouble();
 
         beamBreak = new DigitalInput(Constants.SHOOTER_UPPER_BEAM_BREAK_PORT);
 
-    for (int i = 0; i < flywheelMotors.getTotalMotors(); i++) {
-      TalonFXConfiguration cfg = new TalonFXConfiguration();
+        for (int i = 0; i < flywheelMotors.getTotalMotors(); i++) {
+            TalonFXConfiguration cfg = new TalonFXConfiguration();
 
-      // Neutral + inversion
-      cfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+            // Neutral + inversion
+            cfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-      cfg.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.SHOOTER_FLYWHEEL_CURRENT_LIMIT);
+            cfg.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.SHOOTER_FLYWHEEL_CURRENT_LIMIT);
 
-      cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+            cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-      // Slot 0 PID
-      cfg.Slot0.kP = Constants.FLYWHEEL_kP;
-      cfg.Slot0.kI = Constants.FLYWHEEL_kI;
-      cfg.Slot0.kD = Constants.FLYWHEEL_kD;
+            // Slot 0 PID
+            cfg.Slot0.kP = Constants.FLYWHEEL_kP;
+            cfg.Slot0.kI = Constants.FLYWHEEL_kI;
+            cfg.Slot0.kD = Constants.FLYWHEEL_kD;
 
-      // Slot 0 Feedforward (Talon internal)
-      cfg.Slot0.kS = Constants.FLYWHEEL_kS;
-      cfg.Slot0.kV = Constants.FLYWHEEL_kV;
-      cfg.Slot0.kA = Constants.FLYWHEEL_kA;
+            // Slot 0 Feedforward (Talon internal)
+            cfg.Slot0.kS = Constants.FLYWHEEL_kS;
+            cfg.Slot0.kV = Constants.FLYWHEEL_kV;
+            cfg.Slot0.kA = Constants.FLYWHEEL_kA;
 
-      // Motion Magic acceleration limits
-      cfg.MotionMagic.MotionMagicAcceleration = Constants.FLYWHEEL_MOTION_ACCEL_RPMS / 60.0;
-      cfg.MotionMagic.MotionMagicJerk = Constants.FLYWHEEL_MOTION_JERK;
+            // Motion Magic acceleration limits
+            cfg.MotionMagic.MotionMagicAcceleration =
+                Constants.FLYWHEEL_MOTION_ACCEL_RPMS / 60.0;
+            cfg.MotionMagic.MotionMagicJerk =
+                Constants.FLYWHEEL_MOTION_JERK;
 
-      if (flywheelMotors.getMotorByIndex(i) != null) {
-        flywheelMotors.getMotorByIndex(i).getConfigurator().apply(cfg);
-      }
-    }
+            if (flywheelMotors.getMotorByIndex(i) != null) {
+                flywheelMotors.getMotorByIndex(i).getConfigurator().apply(cfg);
+            }
+        }
 
-    TalonFXConfiguration infeedCFG = new TalonFXConfiguration();
-
-    // Neutral + inversion
-    infeedCFG.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    infeedCFG.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.SHOOTER_INFEED_CURRENT_LIMIT);
-    infeedCFG.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-    this.infeedMotorLeft.getConfigurator().apply(infeedCFG);
-    this.infeedMotorRight.getConfigurator().apply(infeedCFG);
-
-    SmartDashboard.putNumber("Hood Target Position", 0);
-
-    SmartDashboard.putNumber("Flywheel/TargetRPM", Constants.FLYWHEEL_TARGET_RPM);
-
-    SmartDashboard.putNumber("Flywheel/kP", Constants.FLYWHEEL_kP);
-    SmartDashboard.putNumber("Flywheel/kI", Constants.FLYWHEEL_kI);
-    SmartDashboard.putNumber("Flywheel/kD", Constants.FLYWHEEL_kD);
-
-    SmartDashboard.putNumber("Flywheel/kS", Constants.FLYWHEEL_kS);
-    SmartDashboard.putNumber("Flywheel/kV", Constants.FLYWHEEL_kV);
-    SmartDashboard.putNumber("Flywheel/kA", Constants.FLYWHEEL_kA);
-
-    sd_kP = Constants.FLYWHEEL_kP;
-    sd_kI = Constants.FLYWHEEL_kI;
-    sd_kD = Constants.FLYWHEEL_kD;
-
-    sd_kS = Constants.FLYWHEEL_kS;
-    sd_kV = Constants.FLYWHEEL_kV;
-    sd_kA = Constants.FLYWHEEL_kA;
-
-    sdInit = true;
-
-    SmartDashboard.putNumber("Hood Power", 0.05);
-    SmartDashboard.putNumber("Infeed Target RPM", Constants.INFEED_DEFAULT_TARGET_RPM);
-    SmartDashboard.putNumber("Infeed Measured RPM", getInfeedRPM());
-  }
-
-  @Override
-  public void periodic() {
-    // Flywheel is controlled by TestSubsystem via Constants; no dashboard reads
-    // here.
-
-    // This line should be all that is needed when the flywheel should be spun up
-    // updateLaunchValues(true);
-
-    // Update the beam break sensors
-    SmartDashboard.putBoolean("Beam Break", beamBreak.get());
-
-    double measuredRps = flywheelMotorTopLeft.getRotorVelocity()
-        .refresh()
-        .getValueAsDouble();
-
-    currentRPM = measuredRps * 60.0;
-    SmartDashboard.putNumber("Flywheel measured RPM", currentRPM);
-
-    // -------- Shuffleboard tuning --------
-
-    targetRPM = SmartDashboard.getNumber(
-        "Flywheel/TargetRPM",
-        Constants.FLYWHEEL_TARGET_RPM);
-
-    double kP = SmartDashboard.getNumber("Flywheel/kP", sd_kP);
-    double kI = SmartDashboard.getNumber("Flywheel/kI", sd_kI);
-    double kD = SmartDashboard.getNumber("Flywheel/kD", sd_kD);
-
-    double kS = SmartDashboard.getNumber("Flywheel/kS", sd_kS);
-    double kV = SmartDashboard.getNumber("Flywheel/kV", sd_kV);
-    double kA = SmartDashboard.getNumber("Flywheel/kA", sd_kA);
-
-    // Apply only if changed
-    if (!sdInit ||
-        kP != sd_kP || kI != sd_kI || kD != sd_kD ||
-        kS != sd_kS || kV != sd_kV || kA != sd_kA) {
-
-      for (int i = 0; i < flywheelMotors.getTotalMotors(); i++) {
-        TalonFXConfiguration cfg = new TalonFXConfiguration();
-
-        cfg.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.SHOOTER_FLYWHEEL_CURRENT_LIMIT);
+        TalonFXConfiguration infeedCFG = new TalonFXConfiguration();
 
         // Neutral + inversion
-        cfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        infeedCFG.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        infeedCFG.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.SHOOTER_INFEED_CURRENT_LIMIT);
+        infeedCFG.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-        cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        this.infeedMotorLeft.getConfigurator().apply(infeedCFG);
+        this.infeedMotorRight.getConfigurator().apply(infeedCFG);
 
         TalonFXConfiguration hoodCFG = new TalonFXConfiguration();
 
@@ -243,29 +171,30 @@ public class Shooter extends SubsystemBase {
 
         SmartDashboard.putNumber("Hood Target Position", 0);
 
-        // Slot 0 Feedforward (Talon internal)
-        cfg.Slot0.kS = Constants.FLYWHEEL_kS;
-        cfg.Slot0.kV = Constants.FLYWHEEL_kV;
-        cfg.Slot0.kA = Constants.FLYWHEEL_kA;
+        SmartDashboard.putNumber("Flywheel/TargetRPM", Constants.FLYWHEEL_TARGET_RPM);
 
-        // Motion Magic acceleration limits
-        cfg.MotionMagic.MotionMagicAcceleration = Constants.FLYWHEEL_MOTION_ACCEL_RPMS / 60.0;
-        cfg.MotionMagic.MotionMagicJerk = Constants.FLYWHEEL_MOTION_JERK;
+        SmartDashboard.putNumber("Flywheel/kP", Constants.FLYWHEEL_kP);
+        SmartDashboard.putNumber("Flywheel/kI", Constants.FLYWHEEL_kI);
+        SmartDashboard.putNumber("Flywheel/kD", Constants.FLYWHEEL_kD);
 
         SmartDashboard.putNumber("Flywheel/kS", Constants.FLYWHEEL_kS);
         SmartDashboard.putNumber("Flywheel/kV", Constants.FLYWHEEL_kV);
         SmartDashboard.putNumber("Flywheel/kA", Constants.FLYWHEEL_kA);
         SmartDashboard.putNumber("Hood Position", hoodMotorPosition);
 
-      sd_kP = kP;
-      sd_kI = kI;
-      sd_kD = kD;
+        sd_kP = Constants.FLYWHEEL_kP;
+        sd_kI = Constants.FLYWHEEL_kI;
+        sd_kD = Constants.FLYWHEEL_kD;
 
-      sd_kS = kS;
-      sd_kV = kV;
-      sd_kA = kA;
+        sd_kS = Constants.FLYWHEEL_kS;
+        sd_kV = Constants.FLYWHEEL_kV;
+        sd_kA = Constants.FLYWHEEL_kA;
 
-      sdInit = true;
+        sdInit = true;
+
+        SmartDashboard.putNumber("Hood Power", 0.05);
+        SmartDashboard.putNumber("Infeed Target RPM", Constants.INFEED_DEFAULT_TARGET_RPM);
+        SmartDashboard.putNumber("Infeed Measured RPM", getInfeedRPM());
     }
 
     @Override
@@ -285,148 +214,112 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Hood Angle", getHoodMotorAngleRadians());
         SmartDashboard.putNumber("Hood Motor Position", getHoodMotorPosition());
 
-      this.flywheelMotorTopLeft.setControl(req);
-      this.flywheelMotorTopRight
-          .setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Opposed));
-      this.flywheelMotorBottomLeft
-          .setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Aligned));
-      this.flywheelMotorBottomRight
-          .setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Opposed));
-    }
+        double measuredRps =
+                flywheelMotorTopLeft.getRotorVelocity()
+                        .refresh()
+                        .getValueAsDouble();
 
-    double percent = currentRPM / maxRpm;
+        currentRPM = measuredRps * 60.0;
+        SmartDashboard.putNumber("Flywheel measured RPM", currentRPM);
 
-    SmartDashboard.putNumber(
-        "Flywheel/MeasuredRPM",
-        currentRPM);
+        // -------- Shuffleboard tuning --------
 
-    SmartDashboard.putNumber(
-        "Flywheel/PercentOutApprox",
-        percent);
+        targetRPM = SmartDashboard.getNumber(
+                "Flywheel/TargetRPM",
+                Constants.FLYWHEEL_TARGET_RPM);
 
-    SmartDashboard.putNumber("Infeed RPM", getInfeedRPM());
+        double kP = SmartDashboard.getNumber("Flywheel/kP", sd_kP);
+        double kI = SmartDashboard.getNumber("Flywheel/kI", sd_kI);
+        double kD = SmartDashboard.getNumber("Flywheel/kD", sd_kD);
 
-    if (this.runInfeed) {
-      setInfeedRPM(SmartDashboard.getNumber("Infeed Target RPM", Constants.INFEED_DEFAULT_TARGET_RPM));
-    }
+        double kS = SmartDashboard.getNumber("Flywheel/kS", sd_kS);
+        double kV = SmartDashboard.getNumber("Flywheel/kV", sd_kV);
+        double kA = SmartDashboard.getNumber("Flywheel/kA", sd_kA);
 
-    SmartDashboard.putNumber("Flywheel Current Draw", getFlywheelCurrent());
-  }
+        // Apply only if changed
+        if (!sdInit ||
+                kP != sd_kP || kI != sd_kI || kD != sd_kD ||
+                kS != sd_kS || kV != sd_kV || kA != sd_kA) {
 
-  public void updateLaunchValues(boolean interpolate) {
-    // Calculate distance to goal & diffs
-    double xDiff = getGoalPose().getX() - drivebase.getPose().getX();
-    double yDiff = getGoalPose().getY() - drivebase.getPose().getY();
-    double distToGoal = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 
-    // Chose how to get the flywheel speed
-    if (interpolate) {
-      getNeededFlywheelSpeed(distToGoal);
-    } else {
-      calculateLaunchValues(distToGoal);
-    }
+            for (int i = 0; i < flywheelMotors.getTotalMotors(); i++) {
+                TalonFXConfiguration cfg = new TalonFXConfiguration();
 
-  }
+                cfg.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.SHOOTER_FLYWHEEL_CURRENT_LIMIT);
 
-  public void calculateLaunchValues(double distToGoal) {
-    double desiredHeight = distToGoal > 6 ? DESIRED_MAX_HEIGHT : distToGoal / 6;
+                // Neutral + inversion
+                cfg.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-    // Calculate time of flight and velocity vectors
-    double verticalVel = Math.sqrt(2 * GRAVITY * (desiredHeight - FLYWHEEL_HEIGHT));
-    double estimatedTime = (verticalVel + Math.sqrt(verticalVel - 2 * (GRAVITY) * (GOAL_HEIGHT - FLYWHEEL_HEIGHT)))
-        / GRAVITY;
-    double horizonalVel = distToGoal / estimatedTime;
+                cfg.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-    // Calculate hood angle and angle to face goal
-    hoodTargetAngle = Math.atan(verticalVel / horizonalVel);
-    // double angleToFaceGoal = Math.atan2(yDiff, xDiff); I think this is done in a
-    // different file
+                // Slot 0 PID
+                cfg.Slot0.kP = Constants.FLYWHEEL_kP;
+                cfg.Slot0.kI = Constants.FLYWHEEL_kI;
+                cfg.Slot0.kD = Constants.FLYWHEEL_kD;
 
-    // Calculate flywheel RPM needed
-    double initialVel = Math.sqrt(Math.pow((verticalVel), 2) * Math.pow((horizonalVel), 2));
-    flywheelTargetRPM = initialVel * CONVERSION_FACTOR_MPS_TO_RPM;
+                // Slot 0 Feedforward (Talon internal)
+                cfg.Slot0.kS = Constants.FLYWHEEL_kS;
+                cfg.Slot0.kV = Constants.FLYWHEEL_kV;
+                cfg.Slot0.kA = Constants.FLYWHEEL_kA;
 
-    // Set the flywheel Velocity & Hood angle
-    // setFlywheelSpeed(flywheelTargetRPM);
-  }
+                // Motion Magic acceleration limits
+                cfg.MotionMagic.MotionMagicAcceleration =
+                    Constants.FLYWHEEL_MOTION_ACCEL_RPMS / 60.0;
+                cfg.MotionMagic.MotionMagicJerk =
+                    Constants.FLYWHEEL_MOTION_JERK;
 
-  public double getNeededFlywheelSpeed(double distToGoal) {
-    return interpolateFlywheelSpeedByDistance(distToGoal) * FLYWHEEL_MAX_THEORETICAL_RPM; // Normalize the target
-                                                                                          // velocity by the max
-                                                                                          // theoretical
-  }
+                flywheelMotors.getMotorByIndex(i).getConfigurator().apply(cfg);
+            }
+            
+            sd_kP = kP;
+            sd_kI = kI;
+            sd_kD = kD;
 
-  public Pose2d getGoalPose() {
-    // If blue side
-    if (alliance == Alliance.Blue) {
-      return HUB_BLUE_WELDED_POSE;
-      // If red side
-    } else if (alliance == Alliance.Red) {
-      return HUB_RED_WELDED_POSE;
-    } else {
-      return null; // Error
-    }
-  }
+            sd_kS = kS;
+            sd_kV = kV;
+            sd_kA = kA;
 
-  public double getAngleToFaceGoalDegrees(Pose2d robotPosition) {
-    // Find the difference betweeen the robot and the goal
-    double xDiff = getGoalPose().getX() - drivebase.getPose().getX();
-    double yDiff = getGoalPose().getY() - drivebase.getPose().getY();
-
-    // use atan2 to get teh correct angle to face goal & convert to degrees
-    double angleToFaceGoal = Math.toDegrees(Math.atan(yDiff / xDiff));
-
-    return (angleToFaceGoal - robotPosition.getRotation().getDegrees());
-  }
-
-  // This method sets the lower and higher points to interpolate between
-  // Based on the hardcoded flywheel speed & distance tables and the robots
-  // current distance away from the goal
-  public double interpolateFlywheelSpeedByDistance(double distToGoal) {
-
-    double lowerPoint = FLYWHEEL_SPEED_DISTANCE_TABLE[0];
-    int lowerPointIndex = 0;
-
-    double higherPoint = FLYWHEEL_SPEED_DISTANCE_TABLE[FLYWHEEL_SPEED_DISTANCE_TABLE.length - 1];
-    int higherPointIndex = FLYWHEEL_SPEED_DISTANCE_TABLE.length - 1;
-
-    double currentDistance;
-
-    for (int i = FLYWHEEL_SPEED_DISTANCE_TABLE.length - 2; i > 0; i--) {
-      currentDistance = FLYWHEEL_SPEED_TABLE[i];
-      if (currentDistance > distToGoal) {
-        if (currentDistance <= higherPoint) {
-          higherPoint = currentDistance;
-          higherPointIndex = i;
+            sdInit = true;
         }
-      } else if (currentDistance < distToGoal) {
-        if (currentDistance >= lowerPoint) {
-          lowerPoint = currentDistance;
-          lowerPointIndex = i;
+
+        double targetRPS;
+
+        if (flywheelEnabled && canFlywheel) {
+            targetRPS = targetRPM / 60.0;
+            MotionMagicVelocityVoltage req =
+                    new MotionMagicVelocityVoltage(targetRPS)
+                            .withSlot(Constants.FLYWHEEL_PID_SLOT);
+
+            this.flywheelMotorTopLeft.setControl(req);
+            this.flywheelMotorTopRight.setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+            this.flywheelMotorBottomLeft.setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Aligned));
+            this.flywheelMotorBottomRight.setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+        } else {
+            targetRPS = 0;
+            CoastOut req =
+                    new CoastOut();
+
+            this.flywheelMotorTopLeft.setControl(req);
+            this.flywheelMotorTopRight.setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+            this.flywheelMotorBottomLeft.setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Aligned));
+            this.flywheelMotorBottomRight.setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Opposed));
         }
-      } else if (currentDistance == distToGoal) {
-        return FLYWHEEL_SPEED_TABLE[i];
-      }
-    }
-    double lowerSpeed = FLYWHEEL_SPEED_TABLE[lowerPointIndex];
-    double higherSpeed = FLYWHEEL_SPEED_TABLE[higherPointIndex];
 
-    return linearInterpolate(lowerSpeed, higherSpeed, (distToGoal - lowerPoint) / (higherPoint - lowerPoint));
-  }
+        double percent = currentRPM / maxRpm;
 
-  public static double linearInterpolate(double point1, double point2, double percentageSplit) {
-    return point1 + ((point2 - point1) * percentageSplit);
-  }
+        SmartDashboard.putNumber(
+                "Flywheel/MeasuredRPM",
+                currentRPM);
 
-  // Linear interpolate the hood angle between zero and one with the motor
-  // rotations of up and down on the hood
-  public double hoodAngleToMotorPosition(double hoodAngle) {
-    return ((hoodAngle - Constants.HOOD_DOWN_ANGLE_DEGREES) / Constants.HOOD_GEAR_RATIO);
-  }
+        SmartDashboard.putNumber(
+                "Flywheel/PercentOutApprox",
+                percent);
 
-  public double motorPositionToHoodAngle(double motorPosition) {
-    return ((motorPosition * Constants.HOOD_GEAR_RATIO * 360) + Constants.HOOD_DOWN_ANGLE_DEGREES);
-  }
+        SmartDashboard.putNumber("Infeed RPM", getInfeedRPM());
+        
+        if (this.runInfeed) {
+            setInfeedRPM(SmartDashboard.getNumber("Infeed Target RPM", Constants.INFEED_DEFAULT_TARGET_RPM));
+        }
 
         SmartDashboard.putNumber("Flywheel Current Draw", getFlywheelCurrent());
         SmartDashboard.putNumber("Infeed Current Draw", getInfeedCurrent());

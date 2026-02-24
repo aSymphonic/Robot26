@@ -7,31 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1 Meter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "runIntake"
+            "pathName": "true straight path"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopIntake"
+            "waitTime": 5.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1 Meter"
+            "pathName": "endtoend"
           }
         }
       ]

@@ -65,7 +65,7 @@
   ],
   "eventMarkers": [
     {
-      "name": "",
+      "name": "Shoot(temporary)",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
