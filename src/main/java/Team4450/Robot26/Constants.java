@@ -69,14 +69,18 @@ public final class Constants {
 
     public static int SHOOTER_UPPER_BEAM_BREAK_PORT = 3;
 
-    public static int SHOOTER_FLYWHEEL_CURRENT_LIMIT = 40;
-    public static int SHOOTER_INFEED_CURRENT_LIMIT = 20;
+    public static int SHOOTER_FLYWHEEL_CURRENT_LIMIT = 25;
+    public static int SHOOTER_INFEED_CURRENT_LIMIT = 30;
+    public static int SHOOTER_HOOD_CURRENT_LIMIT = 5;
     public static int INTAKE_CURRENT_LIMIT = 20;
+    public static int HOPPER_CURRENT_LIMIT = 40;
 
-    public static double HOOD_TOLERENCE_MOTOR_ROTATIONS = 0.02;
+    public static double HOOD_TOLRENCE_MOTOR_ROTATIONS = 0.02;
     public static double HOOD_TOLERENCE_DEGREES = 5;
-    public static double HOOD_GEAR_RATIO = 3/8;
+    public static double HOOD_GEAR_RATIO = 3/8; //Make sure to change this constant in Shooter class for the hood angle calculation
     public static double HOOD_DOWN_ANGLE_DEGREES = 15;
+
+    public static double SHOOTER_HOOD_TOLERENCE_MOTOR_RAIDIANS = 0.5;
     
     // Intake Constants
     public static int INTAKE_MOTOR_PIVIT_CAN_ID = 9;
@@ -91,7 +95,7 @@ public final class Constants {
     public static int INTAKE_MAX_THEORETICAL_RPM = KRAKEN_X44_MAX_THEORETICAL_RPM / INTAKE_GEAR_RATIO;
     public static int INTAKE_MAX_THEORETICAL_PIVIT_RPM = KRAKEN_X60_MAX_THEORETICAL_RPM / INTAKE_PIVIT_GEAR_RATIO;
 
-    public static double INTAKE_PIVIT_MOTOR_POWER = 0.1;
+    public static double INTAKE_PIVIT_MOTOR_POWER = 0.0;
     // The format of this value is in rotations of the pivit motor
     public static int INTAKE_PIVIT_MOTOR_POSITION_UP = 0;
     // This is an assumed value and not exact
@@ -165,25 +169,11 @@ public final class Constants {
     public static boolean HUB_TRACKING = false;
 
     // Interpolation table
-    public static double[] FLYWHEEL_SPEED_TABLE = {0.57, 0.595, 0.69, 0.715, 0.73, 0.82, 0.86};
-    public static double[] FLYWHEEL_SPEED_DISTANCE_TABLE = {40, 56, 90, 95, 103, 127, 152};
+    public static double[] FLYWHEEL_SPEED_TABLE = {3500, 3500, 3500, 3750, 3850, 4400}; // Converted from percentages to RPM
+    public static double[] FLYWHEEL_SPEED_DISTANCE_TABLE = {0.46, 0.91, 1.52, 2.13, 2.74, 3.35};
     public static double[] FUEL_AIR_TIME_TABLE_SEC = {0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6};
 
-    // ---------------- Turret motion profiling constants ---------------------------------
-    // Turret defaults (internal units are degrees/sec and degrees/sec^2).
-    // These are used as defaults; the runtime code exposes RPM-based tunables for convenience.
-    // Max angular velocity for turret (degrees per second). Tune to your hardware limits.
-    public static final double TURRET_MAX_VELOCITY_DEG_PER_SEC = 180.0;
-    // Max angular acceleration for turret (degrees per second squared). Tune to your hardware limits.
-    public static final double TURRET_MAX_ACCELERATION_DEG_PER_SEC2 = 360.0;
-    // Default turret velocity/accel expressed in RPM units for dashboard convenience.
-    // 1 rotation = 360 degrees, 1 RPM = 6 deg/sec
-    public static final double TURRET_DEFAULT_MAX_VELOCITY_RPM = TURRET_MAX_VELOCITY_DEG_PER_SEC / 6.0; // 30 RPM
-    public static final double TURRET_DEFAULT_MAX_ACCEL_RPMS = TURRET_MAX_ACCELERATION_DEG_PER_SEC2 / 6.0; // 60 RPM/s
-    // Enable/disable acceleration smoothing (true = enabled)
-    public static final boolean TURRET_ACCELERATION_ENABLED = true;
-    // When within this many degrees, snap to setpoint and zero velocity.
-    public static final double TURRET_ANGLE_TOLERANCE_DEG = 0.5;
+    public static double[] HOOD_ARC_TABLE = {0, 0.625, 1.48, 2.17, 2.17, 2.17};
 
     // -------------------------------------------------------------------------------------
     // Flywheel tuning defaults (used as Shuffleboard starting values)
@@ -204,19 +194,19 @@ public final class Constants {
     public static final double FLYWHEEL_kV = 0.11;
     public static final double FLYWHEEL_kA = 0.05;
     // ---------------- PID (Velocity) ----------------
-    public static final double FLYWHEEL_kP = 0.45;
-    public static final double FLYWHEEL_kI = 0.25;
-    public static final double FLYWHEEL_kD = 0.0;
+    public static final double FLYWHEEL_kP = 999999; // This is called Bang Bang
+    public static final double FLYWHEEL_kI = 0;
+    public static final double FLYWHEEL_kD = 0.2;
 
     // ---------------- Motion Magic Velocity ----------------
     // These only affect ramp rate
     // public static final boolean FLYWHEEL_USE_MOTION_MAGIC = true;
 
-    public static final double FLYWHEEL_MOTION_ACCEL_RPMS = 5000.0; // RPM/s
+    public static final double FLYWHEEL_MOTION_ACCEL_RPMS = 3500.0; // RPM/s
     public static final double FLYWHEEL_MOTION_JERK = 0.0;
 
     // ---------------- Telemetry / limits ----------------
-    public static final double FLYWHEEL_MAX_THEORETICAL_RPM = 4000.0;
+    public static final double FLYWHEEL_MAX_THEORETICAL_RPM = 6000.0;
 
     // Flip this to 1 or -1 if direction is wrong
     public static final int FLYWHEEL_DIRECTION = -1;
@@ -226,13 +216,13 @@ public final class Constants {
     public static final double HOPPER_MOTOR_SPEED_RPM = 1000.0; // Default speed in RPM
     public static final double HOPPER_MOTOR_POWER = 1;
 
-    public static final int INTAKE_DEFAULT_TARGET_RPM = 3600;
+    public static final int INTAKE_DEFAULT_TARGET_RPM = 4500;
     // PID constants for Intake
-    public static final double INTAKE_kP = 0.4;
+    public static final double INTAKE_kP = 0.8;
 
     public static final int INFEED_DEFAULT_TARGET_RPM = 4000;
     // PID constants for Shooter Infeed
-    public static final double INFEED_kP = 0.4;
+    public static final double INFEED_kP = 0.8;
 
     // What is the LCD
 	// LCD display line number constants showing class where the line is set.

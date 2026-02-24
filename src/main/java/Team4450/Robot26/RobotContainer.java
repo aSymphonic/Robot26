@@ -137,10 +137,6 @@ public class RobotContainer {
    * and commands.
    */
   public RobotContainer() throws Exception {
-    Util.consoleLog();
-
-    this.intake = new Intake();
-    this.shooter = new Shooter(drivebase);
     // this.testSubsystem = new TestSubsystem();
 
     // Get information about the match environment from the Field Control System.
@@ -177,6 +173,9 @@ public class RobotContainer {
     drivebase = new Drivebase();
     visionSubsystem = new VisionSubsystem(drivebase);
     questNavSubsystem = new QuestNavSubsystem(drivebase);
+
+    intake = new Intake();
+    shooter = new Shooter(drivebase);
 
     throttlePID = new PIDController(Constants.ROBOT_THROTTLE_KP, Constants.ROBOT_THROTTLE_KI,
         Constants.ROBOT_THROTTLE_KD);
@@ -297,7 +296,6 @@ public class RobotContainer {
    * These buttons are for robot driver station with 2 Xbox or F310 controllers.
    */
   private void configureButtonBindings() {
-    Util.consoleLog();
     // ------- Driver controller buttons -------------
 
     // For simple functions, instead of creating commands, we can call convenience
@@ -379,11 +377,15 @@ public class RobotContainer {
     //
     new Trigger(() -> driverController.getLeftTrigger())
         .onTrue(new InstantCommand(shooter::startFlywheel))
+        // .onTrue(new InstantCommand(drivebase::toggleHubTracking))
         .onFalse(new InstantCommand(shooter::stopFlywheel));
+        // .onFalse(new InstantCommand(drivebase::toggleHubTracking));
 
     new Trigger(() -> driverController.getRightTrigger())
         .onTrue(new InstantCommand(shooter::startInfeed))
-        .onFalse(new InstantCommand(shooter::stopInfeed));
+        .onFalse(new InstantCommand(shooter::stopInfeed))
+        .onTrue(new InstantCommand(hopper::start))
+        .onFalse(new InstantCommand(hopper::stop));
 
     new Trigger(() -> driverController.getAButton())
         .onTrue(new InstantCommand(intake::startIntake));
@@ -391,9 +393,9 @@ public class RobotContainer {
     new Trigger(() -> driverController.getBButton())
         .onTrue(new InstantCommand(intake::stopIntake));
 
-    new Trigger(() -> driverController.getYButton())
+    /*new Trigger(() -> driverController.getYButton())
         .onTrue(new InstantCommand(hopper::start))
-        .onFalse(new InstantCommand(hopper::stop));
+        .onFalse(new InstantCommand(hopper::stop));*/
 
     new Trigger(() -> driverController.getXButton())
         .onTrue(new InstantCommand(drivebase::toggleHubTracking));
