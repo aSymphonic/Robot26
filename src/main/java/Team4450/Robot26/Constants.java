@@ -73,6 +73,7 @@ public final class Constants {
     public static int SHOOTER_INFEED_CURRENT_LIMIT = 30;
     public static int SHOOTER_HOOD_CURRENT_LIMIT = 5;
     public static int INTAKE_CURRENT_LIMIT = 20;
+    public static int INTAKE_PIVIT_CURRENT_LIMIT = 5;
     public static int HOPPER_CURRENT_LIMIT = 40;
 
     public static double HOOD_TOLRENCE_MOTOR_ROTATIONS = 0.02;
