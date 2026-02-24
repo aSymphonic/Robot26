@@ -194,8 +194,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("startIntake", new StartIntake(intake));
     NamedCommands.registerCommand("stopIntake", new StopIntake(intake));
-    NamedCommands.registerCommand("startShooter", new StartShoot(shooter));
-    NamedCommands.registerCommand("stopShooter", new StopShoot(shooter));
+    NamedCommands.registerCommand("startShooter", new StartShoot(shooter, hopper));
+    NamedCommands.registerCommand("stopShooter", new StopShoot(shooter, hopper));
 
     // Set the default drive command. This command will be scheduled automatically
     // to run
@@ -379,7 +379,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(shooter::startFlywheel))
         // .onTrue(new InstantCommand(drivebase::toggleHubTracking))
         .onFalse(new InstantCommand(shooter::stopFlywheel));
-        // .onFalse(new InstantCommand(drivebase::toggleHubTracking));
+    // .onFalse(new InstantCommand(drivebase::toggleHubTracking));
 
     new Trigger(() -> driverController.getRightTrigger())
         .onTrue(new InstantCommand(shooter::startInfeed))
@@ -393,9 +393,11 @@ public class RobotContainer {
     new Trigger(() -> driverController.getBButton())
         .onTrue(new InstantCommand(intake::stopIntake));
 
-    /*new Trigger(() -> driverController.getYButton())
-        .onTrue(new InstantCommand(hopper::start))
-        .onFalse(new InstantCommand(hopper::stop));*/
+    /*
+     * new Trigger(() -> driverController.getYButton())
+     * .onTrue(new InstantCommand(hopper::start))
+     * .onFalse(new InstantCommand(hopper::stop));
+     */
 
     new Trigger(() -> driverController.getXButton())
         .onTrue(new InstantCommand(drivebase::toggleHubTracking));
