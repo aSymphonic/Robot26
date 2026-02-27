@@ -52,6 +52,12 @@
           "data": {
             "name": "stopShooter"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "end"
+          }
         }
       ]
     }
