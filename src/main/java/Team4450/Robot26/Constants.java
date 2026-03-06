@@ -102,10 +102,11 @@ public final class Constants {
     // The intake gear ratio it 1 to 1
     public static int INTAKE_GEAR_RATIO = 1 / 1;
     // I was told that the gear box on the Kraken is a 25:1
-    public static int INTAKE_PIVIT_GEAR_RATIO = (25 / 1) * (32 / 16);
+    // public static int INTAKE_PIVIT_GEAR_RATIO = (25 / 1) * (32 / 16);
+    public static double INTAKE_PIVIT_GEAR_RATIO = (39.375 / 1);
 
     public static int INTAKE_MAX_THEORETICAL_RPM = KRAKEN_X44_MAX_THEORETICAL_RPM / INTAKE_GEAR_RATIO;
-    public static int INTAKE_MAX_THEORETICAL_PIVIT_RPM = KRAKEN_X60_MAX_THEORETICAL_RPM / INTAKE_PIVIT_GEAR_RATIO;
+    public static double INTAKE_MAX_THEORETICAL_PIVIT_RPM = KRAKEN_X60_MAX_THEORETICAL_RPM / INTAKE_PIVIT_GEAR_RATIO;
 
     public static double INTAKE_PIVIT_MOTOR_POWER = 0.0;
     // The format of this value is in rotations of the pivit motor

@@ -96,7 +96,6 @@ public class DriveCommand extends Command
             hubPosition = new Pose2d(HUB_RED_WELDED_POSE.getX(), HUB_RED_WELDED_POSE.getY(), Rotation2d.kZero);
         }
         
-        
         double targetHeading;
         
         // Decides where to track

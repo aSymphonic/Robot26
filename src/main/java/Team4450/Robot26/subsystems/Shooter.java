@@ -265,9 +265,17 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean flywheelAtSpeed() {
-        // Change to a constant at some point
-        //
+        // Change tolerence to a constant at some point
         if (Math.abs(this.currentRPM - this.targetRPM) < 150) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean robotAtTarget() {
+        // Change tolerence to a constant at some point
+        if (Math.abs(SmartDashboard.getNumber("Heading Error", 0)) < 14) { // This will have a little delay on it, but should be fine
             return true;
         } else {
             return false;
