@@ -56,6 +56,8 @@ public class Shooter extends SubsystemBase {
     //Hood Rotation Offset
     private double hoodRotationOffset;
 
+    public boolean driverEnabledInfeed = false;
+
     DigitalInput beamBreak;
 
     // Constants for launch calculations
@@ -266,7 +268,7 @@ public class Shooter extends SubsystemBase {
 
     public boolean flywheelAtSpeed() {
         // Change tolerence to a constant at some point
-        if (Math.abs(this.currentRPM - this.targetRPM) < 150) {
+        if (Math.abs(this.currentRPM - this.targetRPM) < 100) {
             return true;
         } else {
             return false;
@@ -641,5 +643,9 @@ public class Shooter extends SubsystemBase {
 
         this.infeedMotorLeft.getConfigurator().apply(infeedCFG);
         this.infeedMotorRight.getConfigurator().apply(infeedCFG);
+    }
+
+    public void driverToggledInfeed() {
+        this.driverEnabledInfeed = !this.driverEnabledInfeed;
     }
 }
