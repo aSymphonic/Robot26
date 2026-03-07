@@ -23,12 +23,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "enableHubTracking"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "shoot"
                 }
               }
@@ -53,12 +47,6 @@
             "waitTime": 5.0
           }
         },
-        {
-          "type": "named",
-          "data": {
-            "name": "disableHubTracking"
-          }
-        }
       ]
     }
   },
