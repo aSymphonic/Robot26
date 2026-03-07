@@ -385,13 +385,11 @@ public class RobotContainer {
         .toggleOnTrue(new InstantCommand(intake::togglePivit));
 
     new Trigger(() -> driverController.getLeftTrigger())
-        // .onTrue(new InstantCommand(shooter::startFlywheel))
-        // .onFalse(new InstantCommand(shooter::stopFlywheel));
         .whileTrue(new Shoot(drivebase, shooter, hopper));
 
     new Trigger(() -> driverController.getRightTrigger())
-        .onTrue(new InstantCommand(shooter::driverToggledInfeed))
-        .onFalse(new InstantCommand(shooter::driverToggledInfeed));
+        .onTrue(new InstantCommand(shooter::startInfeed))
+        .onFalse(new InstantCommand(shooter::stopInfeed));
 
     new Trigger(() -> driverController.getAButton())
         .onTrue(new InstantCommand(intake::startIntake))
@@ -403,11 +401,12 @@ public class RobotContainer {
 
     new Trigger(() -> driverController.getYButton())
         .onTrue(new InstantCommand(shooter::reverseInfeed))
-        .onFalse(new InstantCommand(shooter::stopInfeed));
+        .onTrue(new InstantCommand(intake::reverseIntake))
+        .onFalse(new InstantCommand(shooter::stopInfeed))
+        .onFalse(new InstantCommand(intake::stopIntake));
 
     new Trigger(() -> driverController.getXButton())
-        .onTrue(new InstantCommand(drivebase::enableHubTracking))
-        .onFalse(new InstantCommand(drivebase::disableHubTracking));
+        .onTrue(new InstantCommand(drivebase::toggleHubTracking));
 
     // new Trigger(() -> driverController.getYButton())
     // .onTrue(new InstantCommand(drivebase::driveToOrigin));
