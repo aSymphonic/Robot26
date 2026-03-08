@@ -204,6 +204,7 @@ public class Robot extends TimedRobot {
 
     public long driveStart;
     public long shootStart;
+    public long shootTwo;
 
     public Shoot command;
 
@@ -236,12 +237,15 @@ public class Robot extends TimedRobot {
         //     Util.logException(e);
         //     this.endCompetition();
         // }
+        //
+        RobotContainer.intake.pivitDown();
         driveStart = System.currentTimeMillis();
         RobotContainer.drivebase.driveRobotOriented(-0.2, 0, 0);
 
         shootStart = System.currentTimeMillis();
+        shootTwo = System.currentTimeMillis();
         command = new Shoot(RobotContainer.drivebase, RobotContainer.shooter, RobotContainer.hopper);
-        CommandScheduler.getInstance().schedule(command);
+        RobotContainer.shooter.disableAutomaticDistance();
 
         Util.consoleLog(functionMarker);
     }
@@ -258,6 +262,10 @@ public class Robot extends TimedRobot {
 
         if (System.currentTimeMillis() - shootStart > 10000) {
             command.end(true);
+            RobotContainer.shooter.enableAutomaticDistance();
+        }
+        if (System.currentTimeMillis() - shootTwo > 1000) {
+            CommandScheduler.getInstance().schedule(command);
         }
     }
 

@@ -278,6 +278,14 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putBoolean(Constants.ShooterKeys.DISABLE_AUTO_DISTANCE_UPDATE, this.disableAutomaticDistanceUpdate);
     }
 
+    public void disableAutomaticDistance() {
+        SmartDashboard.putBoolean(Constants.ShooterKeys.DISABLE_AUTO_DISTANCE_UPDATE, true);
+    }
+
+    public void enableAutomaticDistance() {
+        SmartDashboard.putBoolean(Constants.ShooterKeys.DISABLE_AUTO_DISTANCE_UPDATE, false);
+    }
+
     public boolean flywheelAtSpeed() {
         // Change tolerence to a constant at some point
         if (Math.abs(this.currentRPM - this.targetRPM) < 100) {
