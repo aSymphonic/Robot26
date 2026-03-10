@@ -157,8 +157,6 @@ public class Drivebase extends SubsystemBase {
 
   @Override
   public void periodic() {
-    updateVelocity(Constants.ROBOT_PERIOD_SEC);
-
     sdsDrivebase.periodic();
 
     // update 3d simulation: look in AdvantageScope.java for more
@@ -177,16 +175,6 @@ public class Drivebase extends SubsystemBase {
             SmartDashboard.putString("Robot pose", robotPose.toString());
         }
         SmartDashboard.putNumber("DriveBase Current", getDrivetrainCurrent());
-
-        SmartDashboard.putBoolean("Will Enter Trench", willEnterTrench());
-
-        if (willEnterTrench() && !slowFortrench){
-            slowMode = true;
-            slowFortrench = true;
-        } else if (!willEnterTrench() && slowFortrench){
-            slowMode = false;
-        }
-
   }
 
   public double getDrivetrainCurrent() {
@@ -531,88 +519,6 @@ public class Drivebase extends SubsystemBase {
     return distance;
   }
 
-    public boolean willCrashTrench() {
-       double velocityX = fieldRelativeVelocityX;
-       double velocityY = fieldRelativeVelocityY;
-       double bufferTime = 0.50;
-
-    double predictionX = robotPose.getX() + (velocityX * bufferTime);
-    double predictionY = robotPose.getY() + (velocityY * bufferTime);
-
-    // left right
-    double xTolerance = 0.5;
-    double yTolerance = 0.2;
-
-    // only ever false if goal is to go under the trench
-    // units: meter
-    // blue side
-    if (4 - xTolerance < predictionX && predictionX < 5.2 + xTolerance) { // between the blue x values for trench
-      if (0 + yTolerance < predictionY && predictionY < 1.2 - yTolerance) { // between the y values for trench near 0
-        return false;
-      }
-      if (6.8 + yTolerance < predictionY && predictionY < 8.07 - yTolerance) { // between the y values for trench far
-                                                                               // from 0
-        return false;
-      } else
-        return true;
-
-      // red side
-    } else if (11.3 - xTolerance < predictionX && predictionX < 12.5 + xTolerance) { // between the red x values for
-                                                                                     // trench
-      if (0 + yTolerance < predictionY && predictionY < 1.2 - yTolerance) { // between the y values for trench near 0
-        return false;
-      }
-      if (6.8 + yTolerance < predictionY && predictionY < 8.07 - yTolerance) { // between the y values for trench far
-                                                                               // from 0
-        return false;
-      } else
-        return true;
-
-    } else
-      return false;
-  }
-
-    public boolean willEnterTrench() {
-       double velocityX = fieldRelativeVelocityX;
-       double velocityY = fieldRelativeVelocityY;
-       double bufferTime = 0.50;
-
-    double predictionX = robotPose.getX() + (velocityX * bufferTime);
-    double predictionY = robotPose.getY() + (velocityY * bufferTime);
-
-    // left right
-    double xTolerance = 0.5;
-    double yTolerance = 0.2;
-
-    // only ever true if prediction is under the trench
-    // units: meter
-    // blue side
-    if (4 - xTolerance < predictionX && predictionX < 5.2 + xTolerance) { // between the blue x values for trench
-      if (0 + yTolerance < predictionY && predictionY < 1.2 - yTolerance) { // between the y values for trench near 0
-        return true;
-      }
-      if (6.8 + yTolerance < predictionY && predictionY < 8.07 - yTolerance) { // between the y values for trench far
-                                                                               // from 0
-        return true;
-      } else
-        return false;
-
-      // red side
-    } else if (11.3 - xTolerance < predictionX && predictionX < 12.5 + xTolerance) { // between the red x values for
-                                                                                     // trench
-      if (0 + yTolerance < predictionY && predictionY < 1.2 - yTolerance) { // between the y values for trench near 0
-        return true;
-      }
-      if (6.8 + yTolerance < predictionY && predictionY < 8.07 - yTolerance) { // between the y values for trench far
-                                                                               // from 0
-        return true;
-      } else
-        return false;
-
-    } else
-      return false;
-  }
-
   /**
    * Update the robot & swerve module displays on the "Field2d" field display in
    * sim.
@@ -691,75 +597,7 @@ public class Drivebase extends SubsystemBase {
     this.slowMode = false;
   }
 
-  public void updateVelocity(double timeSinceLastUpdateSec) {
-    if (lastPose == null) {
-      lastPose = getPose();
-      return;
-    }
-
-    Pose2d currentPose = getPose();
-
-    double deltaX = currentPose.getTranslation().getX() - lastPose.getTranslation().getX();
-    double deltaY = currentPose.getTranslation().getY() - lastPose.getTranslation().getY();
-
-    double rawVelocityX = deltaX / timeSinceLastUpdateSec;
-    double rawVelocityY = deltaY / timeSinceLastUpdateSec;
-
-    if (Math.abs(rawVelocityX) <= 3 && Math.abs(rawVelocityX - lastRawVelocityX) < 0.4) {
-
-      if (Math.abs(rawVelocityX - lastRawVelocityX) > 0.4) {
-        rawVelocityX = lastRawVelocityX;
-      }
-
-            if (Math.abs(rawVelocityX) < 0.2) {
-                rawVelocityX = 0;
-            }
-
-      velocityWindowX[velocityIndexX] = rawVelocityX;
-      velocityIndexX = (velocityIndexX + 1) % VELOCITY_WINDOW_SIZE;
-
-      if (velocityCountX < VELOCITY_WINDOW_SIZE) {
-        velocityCountX++;
-      }
-
-      double sumX = 0;
-      for (int i = 0; i < velocityCountX; i++) {
-        sumX += velocityWindowX[i];
-      }
-
-      fieldRelativeVelocityX = sumX / velocityCountX;
-    }
-
-    if (Math.abs(rawVelocityY) <= 3 && Math.abs(rawVelocityY - lastRawVelocityY) < 0.4) {
-
-      if (Math.abs(rawVelocityY - lastRawVelocityY) > 0.4) {
-        rawVelocityY = lastRawVelocityY;
-      }
-
-            if (Math.abs(rawVelocityY) < 0.2) {
-                rawVelocityY = 0;
-            }
-
-      velocityWindowY[velocityIndexY] = rawVelocityY;
-      velocityIndexY = (velocityIndexY + 1) % VELOCITY_WINDOW_SIZE;
-
-      if (velocityCountY < VELOCITY_WINDOW_SIZE) {
-        velocityCountY++;
-      }
-
-      double sumY = 0;
-      for (int i = 0; i < velocityCountY; i++) {
-        sumY += velocityWindowY[i];
-      }
-
-      fieldRelativeVelocityY = sumY / velocityCountY;
-    }
-
-    SmartDashboard.putNumber("VelocityX", fieldRelativeVelocityX);
-    SmartDashboard.putNumber("VelocityY", fieldRelativeVelocityY);
-
-    lastRawVelocityX = rawVelocityX;
-    lastRawVelocityY = rawVelocityY;
-    lastPose = currentPose;
+  public ChassisSpeeds getSpeeds() {
+      return sdsDrivebase.getSpeeds();
   }
 }
