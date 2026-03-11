@@ -1,32 +1,27 @@
 package Team4450.Robot26.commands;
 
 import Team4450.Lib.Util; 
-import Team4450.Robot26.subsystems.Turret;
+import Team4450.Robot26.subsystems.Shooter;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import Team4450.Robot26.subsystems.Turret;
-import java.util.Set;
-import Team4450.Robot26.RobotContainer;
 import Team4450.Robot26.subsystems.Drivebase;
 import edu.wpi.first.math.controller.PIDController;
 
 public class ShootinPlace {
     private Drivebase drivebase;
-    private Turret turret;
+    private Shooter shooter;
     double targetAngle;
     private Pose2d currentPose2d;
     PIDController rotationController = new PIDController(0.002, 0, 0);
     private boolean finished = false;
     
-    public ShootinPlace(Drivebase drivebase, Turret turret) {
+    public ShootinPlace(Drivebase drivebase, Shooter shooter) {
         this.drivebase = drivebase;
-        this.turret = turret;
+        this.shooter = shooter;
     }
 
     public void initialize() {
         currentPose2d = drivebase.getPose();
-        targetAngle = turret.getAngleToFaceGoalDegrees(currentPose2d);
+        targetAngle = shooter.getAngleToFaceGoalDegrees(currentPose2d);
         Util.consoleLog("Target Angle: %.2f", targetAngle);
         finished = false;
         rotationController.setTolerance(0.5);

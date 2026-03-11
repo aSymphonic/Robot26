@@ -252,8 +252,6 @@ public class Drivebase extends SubsystemBase {
    * Set drive wheels to X configuration to lock robot from moving.
    */
   public void setX() {
-    Util.consoleLog();
-
     sdsDrivebase.applyRequest(() -> driveBrake);
   }
 
