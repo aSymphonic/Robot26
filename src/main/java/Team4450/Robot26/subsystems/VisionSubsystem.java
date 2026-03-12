@@ -80,7 +80,7 @@ public class VisionSubsystem extends SubsystemBase {
             return;
         }
         // How to stpo this when disabled
-        boolean useLeftLimelight = true;
+        boolean useFrontLimelight = true;
         boolean useRightLimelight = true;
         // Get latest pose estimage from each camera
         
@@ -92,26 +92,23 @@ public class VisionSubsystem extends SubsystemBase {
         LimelightHelpers.PoseEstimate right_mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue(Constants.LIMELIGHT_RIGHT);
         // Pose2d right_mt2 = LimelightHelpers.getBotPose2d_wpiBlue(Constants.LIMELIGHT_RIGHT);
 
-        // If the angular velocity is greater than 720 degrees per second ignore the vision update
+        // If the angular velocity is greater than 120 degrees per second ignore the vision update
         //
         // IDK if this is yaw rate or what units this is in
-        if (Math.abs(drivebase.pigeonWrapper.pigeon.getAngularVelocityXDevice().getValueAsDouble()) > 720) {
+        if (Math.abs(drivebase.pigeonWrapper.pigeon.getAngularVelocityXDevice().getValueAsDouble()) > 120) {
             return;
         }
 
-        // Get rid of any result that says we are out of the field
-
-        // IDK what units the getX() return
-        // IDK what units the getY() return
-
+        // getX() return meters
+        // getY() return meters
 
         if (front_mt2 != null) {
             if (Math.abs(front_mt2.pose.getX()) > Constants.FIELD_MAX_X) {
-                useLeftLimelight = false;
+                useFrontLimelight = false;
             }
 
             if (Math.abs(front_mt2.pose.getY()) > Constants.FIELD_MAX_Y) {
-                useLeftLimelight = false;
+                useFrontLimelight = false;
             }
 
             double numTags = front_mt2.rawFiducials.length;
@@ -125,10 +122,14 @@ public class VisionSubsystem extends SubsystemBase {
 
             SmartDashboard.putNumber("Front Limelight numTags", numTags);
             if (numTags < 2) {
-                useLeftLimelight = false;
+                useFrontLimelight = false;
             }
 
-            if (useLeftLimelight) {
+            if (Math.abs(drivebase.getXVelocity()) > 0.1 || Math.abs(drivebase.getYVelocity()) > 0.1) {
+                useFrontLimelight = false;
+            }
+
+            if (useFrontLimelight) {
                 SmartDashboard.putBoolean("Send Front Limelight info", true);
                 drivebase.addLimelightMeasurement(front_mt2.pose, front_mt2.timestampSeconds);
                 this.frontLimelightSee = true;
@@ -157,6 +158,10 @@ public class VisionSubsystem extends SubsystemBase {
             }
 
             if (numTags < 2) {
+                useRightLimelight = false;
+            }
+
+            if (Math.abs(drivebase.getXVelocity()) > 0.1 || Math.abs(drivebase.getYVelocity()) > 0.1) {
                 useRightLimelight = false;
             }
 
