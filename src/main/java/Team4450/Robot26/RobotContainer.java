@@ -5,6 +5,7 @@ import static Team4450.Robot26.Constants.*;
 import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import Team4450.Robot26.commands.DisableHubTracking;
 import Team4450.Robot26.commands.DriveCommand;
@@ -73,6 +74,8 @@ public class RobotContainer {
   // public TestSubsystem testSubsystem;
 
   public static Hopper hopper = new Hopper();
+
+  private final SendableChooser<Command> autoChooser;
 
   // Subsystem Default Commands.
 
@@ -260,7 +263,8 @@ public class RobotContainer {
     }).start();
 
     // Configure autonomous routines and send to dashboard.
-    setAutoChoices();
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
     // Configure the button bindings.
     configureButtonBindings();
@@ -277,8 +281,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // ------- Driver controller buttons -------------
 
-    // For simple functions, instead of creating commands, we can call convenience functions on
-    // the target subsystem from an InstantCommand. It can be tricky deciding what functions
+    // For simple functions, instead of creating commands, we can call convenience
+    // functions on
+    // the target subsystem from an InstantCommand. It can be tricky deciding what
+    // functions
     // should be an aspect of the subsystem and what functions should be in
     // Commands...
 
@@ -336,7 +342,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(shooter::toggleDisableAutomaticDistanceTwo));
 
     // -------- Utility controller buttons ----------
-    
+
     new Trigger(() -> driverController.getRightBumperButton())
         .toggleOnTrue(new InstantCommand(intake::togglePivit));
 
@@ -375,7 +381,7 @@ public class RobotContainer {
   // }
 
   // public static String getAutonomousCommandName() {
-  //   return autonomousCommandName;
+  // return autonomousCommandName;
   // }
 
   // Configure SendableChooser (drop down list on dashboard) with auto program
@@ -386,6 +392,10 @@ public class RobotContainer {
     // autoChooser = AutoBuilder.buildAutoChooser();
 
     // SmartDashboard.putData("Auto Program", autoChooser);
+  }
+
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
   }
 
   /**
