@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4839655172413804,
-        "y": 4.826670258620689
+        "x": 2.4741918103448284,
+        "y": 4.70938577586207
       },
       "isLocked": false,
       "linkedName": "C-Shoot"
     },
     {
       "anchor": {
-        "x": 3.61771551724138,
+        "x": 3.4613362068965525,
         "y": 4.035
       },
       "prevControl": {
-        "x": 3.637950835545966,
-        "y": 4.9051186870971994
+        "x": 3.4713851756237335,
+        "y": 4.748476779629819
       },
       "nextControl": {
-        "x": 3.5981681034482764,
-        "y": 3.1944612068965523
+        "x": 3.4515625000000005,
+        "y": 3.3410668103448278
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 4.035
       },
       "prevControl": {
-        "x": 2.4839655172413804,
-        "y": 3.301971982758621
+        "x": 2.4741918103448284,
+        "y": 3.429030172413793
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,8 +49,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.2,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 270.0,
     "maxAngularAcceleration": 270.0,
     "nominalVoltage": 12.0,
@@ -66,5 +66,5 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

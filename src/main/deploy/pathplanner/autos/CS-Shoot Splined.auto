@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CS-Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Circle"
+            "pathName": "CS-Shoot Splined"
           }
         },
         {
@@ -23,7 +17,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 7.0
+                  "waitTime": 5.0
                 }
               },
               {
