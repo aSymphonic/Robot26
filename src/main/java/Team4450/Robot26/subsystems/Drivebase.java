@@ -107,9 +107,7 @@ public class Drivebase extends SubsystemBase {
     this.overrideQuestForRobotPose = false;
     SmartDashboard.putBoolean("overrideQuestForRobotPose", this.overrideQuestForRobotPose);
 
-    // Add pigeon gyro as a Sendable. Updates the dashboard heading indicator
-    // automatically.
-    SmartDashboard.putData("Pigeon Gyro", pigeonWrapper);
+    // Updates the dashboard heading indicator automatically.
     SmartDashboard.putData("Field2d", field2d);
 
     // Check Gyro.

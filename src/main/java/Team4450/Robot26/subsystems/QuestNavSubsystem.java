@@ -105,7 +105,6 @@ public class QuestNavSubsystem extends SubsystemBase {
                     // if (Math.abs(drivebase.getPose().getX() - drivebase.limelightPoseEstimate.getX()) > Constants.LIMELIGHT_QUEST_ERROR_AMOUNT_METERS || Math.abs(drivebase.getPose().getX() - drivebase.limelightPoseEstimate.getY()) > Constants.LIMELIGHT_QUEST_ERROR_AMOUNT_METERS) {
                         Pose3d limelightEstimatePose = new Pose3d(drivebase.limelightPoseEstimate);
                         resetQuestOdometry(limelightEstimatePose);
-                        RobotContainer.drivebase.pigeonWrapper.setCurrentYaw(RobotContainer.drivebase.limelightPoseEstimate.getRotation().getDegrees());
                         drivebase.limelightPoseEstimate = nullPose2d;
                         this.lastResetTime = System.currentTimeMillis();
                     // }

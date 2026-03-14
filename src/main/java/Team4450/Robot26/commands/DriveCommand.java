@@ -110,18 +110,19 @@ public class DriveCommand extends Command {
         }
 
 
+        targetHeading -= 180;
+        targetHeading = normalizeAngle(targetHeading);
         SmartDashboard.putNumber("Target Heading", targetHeading);
 
         double error = targetHeading - (drivebase.getPose().getRotation().getDegrees());
 
         SmartDashboard.putNumber("Heading Error", error);
 
-        if (Constants.HUB_TRACKING &&
-                (SmartDashboard.putBoolean("Send Front Limelight info", true) ||
-                 SmartDashboard.putBoolean("Send Right Limelight info", true))) {
+        if (Constants.HUB_TRACKING) {
 
             // Uses a PID and the previous assigned target heading to rotate there
-            double rotation = -headingPID.calculate(error);
+            double rotation = headingPID.calculate(-Math.toDegrees(drivebase.getPose().getRotation().getDegrees()), -targetHeading);
+            SmartDashboard.putNumber("Heading PID Output", rotation);
             double throttle = throttleSupplier.getAsDouble();
             double strafe = strafeSupplier.getAsDouble();
 
@@ -153,5 +154,26 @@ public class DriveCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         Util.consoleLog("interrupted=%b", interrupted);
+    }
+
+    public double normalizeAngle(double angle) {
+        if (angle >= -180 && angle < 180) {
+            return angle;
+        }
+
+        // Normalize the angle to the range [-360, 360).
+        double normalizedAngle = angle % 360;
+
+        // If the result was negative, shift it to the range [0, 360).
+        if (normalizedAngle < 0) {
+            normalizedAngle += 360;
+        }
+
+        // If the angle is in the range [180, 360), shift it to [-180, 0).
+        if (normalizedAngle >= 180) {
+            normalizedAngle -= 360;
+        }
+
+        return normalizedAngle;
     }
 }
