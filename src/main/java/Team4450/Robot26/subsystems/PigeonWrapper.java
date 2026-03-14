@@ -31,8 +31,12 @@ public class PigeonWrapper extends SubsystemBase {
         return -pigeon.getYaw().getValueAsDouble() + startingYaw;
     }
 
+    public double getYawRaw() {
+        return -pigeon.getYaw().getValueAsDouble();
+    }
+
     public void setCurrentYaw(double target) {
-        startingYaw = -(getHeading() - target);
+        startingYaw = -(getYawRaw() - target);
     }
 
 	/**

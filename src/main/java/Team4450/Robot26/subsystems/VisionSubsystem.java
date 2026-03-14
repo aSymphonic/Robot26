@@ -173,7 +173,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public void resetYaw() {
-        RobotContainer.drivebase.pigeonWrapper.setCurrentYaw(RobotContainer.drivebase.limelightPoseEstimate.getRotation().getDegrees());
+        RobotContainer.drivebase.pigeonWrapper.setCurrentYaw(0);
     }
 
     public void zeroLimelightIMU(RobotOrientation rO) { // Set to IMU mode 0 to diable the internal limelight IMU

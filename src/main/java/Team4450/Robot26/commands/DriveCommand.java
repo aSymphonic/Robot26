@@ -110,18 +110,13 @@ public class DriveCommand extends Command {
         }
 
 
-        targetHeading -= 180;
         targetHeading = normalizeAngle(targetHeading);
         SmartDashboard.putNumber("Target Heading", targetHeading);
-
-        double error = targetHeading - (drivebase.getPose().getRotation().getDegrees());
-
-        SmartDashboard.putNumber("Heading Error", error);
 
         if (Constants.HUB_TRACKING) {
 
             // Uses a PID and the previous assigned target heading to rotate there
-            double rotation = headingPID.calculate(-Math.toDegrees(drivebase.getPose().getRotation().getDegrees()), -targetHeading);
+            double rotation = headingPID.calculate(-drivebase.getYaw180(), targetHeading);
             SmartDashboard.putNumber("Heading PID Output", rotation);
             double throttle = throttleSupplier.getAsDouble();
             double strafe = strafeSupplier.getAsDouble();
