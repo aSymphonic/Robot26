@@ -111,9 +111,8 @@ public class Drivebase extends SubsystemBase {
     RobotModeTriggers.disabled().whileTrue(
         sdsDrivebase.applyRequest(() -> idle).ignoringDisable(true));
 
-    // Set tracking of robot field position at starting point. Blue perspective.
-    // note that this doesn't really do much because PathPlanner redoes this anyway.
-    // More for a starting pose in sim testing.
+        // Updates the dashboard heading indicator automatically.
+        SmartDashboard.putData(Constants.SmartDashboardKeys.FIELD2D, field2d);
 
     // At some point move this to teleop init if it can be done quickly because
     // we will be waiting for the Limelight to get an accurate position during init
@@ -140,8 +139,6 @@ public class Drivebase extends SubsystemBase {
   public void periodic() {
     sdsDrivebase.periodic();
 
-        SmartDashboard.putNumber(Constants.SmartDashboardKeys.BATTERY_VOLTAGE, RobotController.getBatteryVoltage());
-
     // update 3d simulation: look in AdvantageScope.java for more
     // AdvantageScope.getInstance().setRobotPose(getPose());
     // AdvantageScope.getInstance().update();
@@ -150,14 +147,25 @@ public class Drivebase extends SubsystemBase {
     // See this function for more information.
     updateModulePoses(sdsDrivebase);
 
-        // Basic telemetry
-        SmartDashboard.putNumber(Constants.SmartDashboardKeys.GYRO_ANGLE, getYaw());
-        SmartDashboard.putString(Constants.SmartDashboardKeys.ROBOT_OD_POSE, getODPose().toString());
-        if (robotPose != null) {
-            SmartDashboard.putString(Constants.SmartDashboardKeys.ROBOT_POSE, robotPose.toString());
-        }
-        SmartDashboard.putNumber(Constants.SmartDashboardKeys.DRIVEBASE_CURRENT, getDrivebaseCurrent());
-    }
+    SmartDashboard.putNumber("Gyro starting yaw", pigeonWrapper.startingYaw);
+
+    SmartDashboard.putNumber("Gyro Heading", pigeonWrapper.getHeading());
+    SmartDashboard.putString(Constants.SmartDashboardKeys.ROBOT_OD_POSE, getODPose().toString());
+    SmartDashboard.putString(Constants.SmartDashboardKeys.ROBOT_POSE, getPose().toString());
+    SmartDashboard.putNumber(Constants.SmartDashboardKeys.DRIVEBASE_CURRENT, getDrivetrainCurrent());
+    SmartDashboard.putString(Constants.SmartDashboardKeys.LIMELIGHT_POSE, this.limelightPoseEstimate.toString());
+  }
+
+  public double getDrivetrainCurrent() {
+    return sdsDrivebase.getModule(0).getDriveMotor().getSupplyCurrent().getValueAsDouble()
+        + sdsDrivebase.getModule(0).getSteerMotor().getSupplyCurrent().getValueAsDouble()
+        + sdsDrivebase.getModule(1).getDriveMotor().getSupplyCurrent().getValueAsDouble()
+        + sdsDrivebase.getModule(1).getSteerMotor().getSupplyCurrent().getValueAsDouble()
+        + sdsDrivebase.getModule(2).getDriveMotor().getSupplyCurrent().getValueAsDouble()
+        + sdsDrivebase.getModule(2).getSteerMotor().getSupplyCurrent().getValueAsDouble()
+        + sdsDrivebase.getModule(3).getDriveMotor().getSupplyCurrent().getValueAsDouble()
+        + sdsDrivebase.getModule(3).getSteerMotor().getSupplyCurrent().getValueAsDouble();
+  }
 
     public double getDrivebaseCurrent() {
         return sdsDrivebase.getModule(0).getDriveMotor().getSupplyCurrent().getValueAsDouble()
@@ -170,26 +178,26 @@ public class Drivebase extends SubsystemBase {
             + sdsDrivebase.getModule(3).getSteerMotor().getSupplyCurrent().getValueAsDouble();
     }
 
-  public void drive(double throttle, double strafe, double rotation) {
-    if (this.lastThrottle == throttle && this.lastStrafe == strafe &&
-        this.lastRotation == rotation) {
-      return;
-    }
+    public void drive(double throttle, double strafe, double rotation) {
+        if (this.lastThrottle == throttle && this.lastStrafe == strafe &&
+                this.lastRotation == rotation) {
+            return;
+                }
 
-    if (fieldRelativeDriving) {
-      sdsDrivebase.setControl(
-          driveField.withVelocityX(throttle * maxSpeed)
-              .withVelocityY(strafe * maxSpeed)
-              .withRotationalRate(rotation * maxRotRate));
-    } else {
-      sdsDrivebase.setControl(
-          driveRobot.withVelocityX(throttle * maxSpeed)
-              .withVelocityY(strafe * maxSpeed)
-              .withRotationalRate(rotation * maxRotRate));
-    }
-    this.lastThrottle = throttle;
-    this.lastStrafe = strafe;
-    this.lastRotation = rotation;
+        if (fieldRelativeDriving) {
+            sdsDrivebase.setControl(
+                    driveField.withVelocityX(throttle * maxSpeed)
+                    .withVelocityY(strafe * maxSpeed)
+                    .withRotationalRate(rotation * maxRotRate));
+        } else {
+            sdsDrivebase.setControl(
+                    driveRobot.withVelocityX(throttle * maxSpeed)
+                    .withVelocityY(strafe * maxSpeed)
+                    .withRotationalRate(rotation * maxRotRate));
+        }
+        this.lastThrottle = throttle;
+        this.lastStrafe = strafe;
+        this.lastRotation = rotation;
 
   }
 
@@ -332,24 +340,24 @@ public class Drivebase extends SubsystemBase {
     return sdsDrivebase.getState().Pose;
   }
 
-  /**
-   * Returns current pose estimate for the robot.
-   * In this function the radians to radians conversion is because the input is
-   * incorrect somewhere
-   * 
-   * @return Robot pose.
-   */
-  public Pose2d getPose() {
-    if (RobotContainer.questNavSubsystem.hasQuest()
-        || SmartDashboard.getBoolean("overrideQuestForRobotPose", this.overrideQuestForRobotPose)) {
-      SmartDashboard.putBoolean("Trying to send current robotPose", true);
-      return new Pose2d(robotPose.getX(), robotPose.getY(),
-          new Rotation2d(Math.toRadians(robotPose.getRotation().getRadians())));
-    } else {
-      SmartDashboard.putBoolean("Trying to send current robotPose", false);
-      return new Pose2d(0, 0, new Rotation2d(0));
+    /**
+     * Returns current pose estimate for the robot.
+     * In this function the radians to radians conversion is because the input is
+     * incorrect somewhere
+     * 
+     * @return Robot pose.
+     */
+    public Pose2d getPose() {
+        if (RobotContainer.questNavSubsystem.hasQuest()
+                || SmartDashboard.getBoolean("overrideQuestForRobotPose", this.overrideQuestForRobotPose)) {
+            SmartDashboard.putBoolean("Trying to send current robotPose", true);
+            return new Pose2d(robotPose.getX(), robotPose.getY(),
+                    new Rotation2d(Math.toRadians(pigeonWrapper.getYaw180())));
+        } else {
+            SmartDashboard.putBoolean("Trying to send current robotPose", false);
+            return new Pose2d(0, 0, new Rotation2d(0));
+        }
     }
-  }
 
   // Get the sds ordometry rotation velocity in radians per second
   public double getRotVelocity() {

@@ -80,6 +80,7 @@ public class Shooter extends SubsystemBase {
     private boolean disableAutomaticFlywheelUpdate = false;
     private boolean disableAutomaticDistanceUpdate = false;
     private boolean disableAutomaticDistanceUpdateTwo = false;
+    private boolean disableAutomaticDistanceUpdateThree = false;
 
     private boolean enabledHood = false;
 
@@ -141,6 +142,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_FLYWHEEL_UPDATE, this.disableAutomaticFlywheelUpdate);
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE, this.disableAutomaticDistanceUpdate);
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE_TWO, this.disableAutomaticDistanceUpdateTwo);
+        SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE_THREE, this.disableAutomaticDistanceUpdateThree);
 
         this.enabledHood = false;
     }
@@ -247,9 +249,11 @@ public class Shooter extends SubsystemBase {
             distToGoal = 2.5;
         } else if (SmartDashboard.getBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE_TWO, this.disableAutomaticDistanceUpdateTwo)) {
             distToGoal = 4.5;
+        } else if (SmartDashboard.getBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE_THREE, this.disableAutomaticDistanceUpdateThree)) {
+            distToGoal = 2;
         } else {
             // Calculate distance to goal & diffs
-            Pose2d goalPose = drivebase.getPoseToAim(getGoalPose());
+            Pose2d goalPose = (getGoalPose());
             double xDiff = Math.abs(goalPose.getX() - drivebase.getPose().getX());
             double yDiff = Math.abs(goalPose.getY() - drivebase.getPose().getY());
             distToGoal = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
@@ -283,6 +287,12 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE_TWO, this.disableAutomaticDistanceUpdateTwo);
     }
 
+    public void toggleDisableAutomaticDistanceThree() {
+        this.disableAutomaticDistanceUpdateThree = SmartDashboard.getBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE_THREE, this.disableAutomaticDistanceUpdateThree);
+        this.disableAutomaticDistanceUpdateThree = !this.disableAutomaticDistanceUpdateThree;
+        SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE_THREE, this.disableAutomaticDistanceUpdateThree);
+    }
+
     public void disableAutomaticDistance() {
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE, true);
     }
@@ -297,6 +307,14 @@ public class Shooter extends SubsystemBase {
 
     public void enableAutomaticDistanceTwo() {
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE_TWO, false);
+    }
+
+    public void disableAutomaticDistanceThree() {
+        SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE_THREE, true);
+    }
+
+    public void enableAutomaticDistanceThree() {
+        SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_DISTANCE_UPDATE_THREE, false);
     }
 
     public boolean flywheelAtSpeed() {

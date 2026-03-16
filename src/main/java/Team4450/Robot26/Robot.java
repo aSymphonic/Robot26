@@ -232,7 +232,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLED, false);
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.AUTO_MODE, true);
 
-    robotContainer.getMatchInformation();
+        RobotContainer.drivebase.pigeonWrapper.setCurrentYaw(0);
+
+        robotContainer.getMatchInformation();
 
     // RobotContainer function determines which auto command is selected to run.
     Command autonomousCommand = robotContainer.getAutonomousCommand();
@@ -269,8 +271,11 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLED, false);
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.TELEOP_MODE, true);
 
-    // Set Limelight imu mode to 2
-    RobotContainer.visionSubsystem.enableInternalIMU();
+        // Set Limelight imu mode to 2
+        RobotContainer.visionSubsystem.enableInternalIMU();
+
+        // Figure out how to reset the yaw at a good point in time
+        // RobotContainer.drivebase.pigeonWrapper.setCurrentYaw(0);
 
     if (RobotContainer.drivebase.limelightPoseEstimate.getX() != 0
         && RobotContainer.drivebase.limelightPoseEstimate.getY() != 0) {

@@ -33,7 +33,10 @@ public class Hopper extends SubsystemBase {
 
         this.hopperMotor.set(0);
         this.hopperMotorRight.set(0);
+    }
 
+    @Override
+    public void periodic() {
         SmartDashboard.putNumber("Lower Rollers Current Draw", getLowerRollersCurrent());
     }
 

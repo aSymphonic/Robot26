@@ -259,6 +259,7 @@ public final class Constants {
         public static final String DISABLE_AUTO_FLYWHEEL_UPDATE     = "disableAutomaticFlywheelUpdate";
         public static final String DISABLE_AUTO_DISTANCE_UPDATE     = "disableAutomaticDistanceUpdate";
         public static final String DISABLE_AUTO_DISTANCE_UPDATE_TWO     = "disableAutomaticDistanceUpdateTwo";
+        public static final String DISABLE_AUTO_DISTANCE_UPDATE_THREE     = "disableAutomaticDistanceUpdateThree";
         public static final String ROBOT_LAUNCH_X                   = "RobotLaunchX";
         public static final String ROBOT_LAUNCH_Y                   = "RobotLaunchY";
         public static final String GOAL_POSE                        = "Goal Pose";
@@ -269,6 +270,7 @@ public final class Constants {
         public static final String HEADING_I = "Heading I";
         public static final String HEADING_D = "Heading D";
         public static final String HEADING_PID_TOGGLE = "Heading PID Toggle";
+        public static final String HEADING_PID_OUTPUT = "Heading PID Output";
         public static final String TARGET_HEADING = "Target Heading";
         public static final String HEADING_ERROR = "Heading Error";
 
@@ -299,6 +301,7 @@ public final class Constants {
         public static final String GYRO_ANGLE = "Gyro angle";
         public static final String ROBOT_OD_POSE = "Robot od pose";
         public static final String ROBOT_POSE = "Robot pose";
+        public static final String LIMELIGHT_POSE = "Limelight Pose";
         public static final String DRIVEBASE_CURRENT = "Drivebase Current";
     }
 
