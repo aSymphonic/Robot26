@@ -38,6 +38,7 @@ public class Hopper extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Lower Rollers Current Draw", getLowerRollersCurrent());
+        SmartDashboard.putNumber("Lower Rollers RPM", getLowerRollersRPM());
     }
 
     public void start() {
@@ -62,5 +63,9 @@ public class Hopper extends SubsystemBase {
 
     public double getLowerRollersCurrent() { // TODO: FIX
         return hopperMotor.getSupplyCurrent(true).getValueAsDouble();
+    }
+
+    public double getLowerRollersRPM() {
+        return hopperMotor.getRotorVelocity(true).getValueAsDouble() * 60;
     }
 }

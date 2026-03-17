@@ -151,6 +151,7 @@ public class Drivebase extends SubsystemBase {
     SmartDashboard.putNumber("Gyro starting yaw", pigeonWrapper.startingYaw);
 
     SmartDashboard.putNumber("Gyro Heading", pigeonWrapper.getHeading());
+    SmartDashboard.putNumber(Constants.SmartDashboardKeys.BATTERY_VOLTAGE, RobotController.getBatteryVoltage());
     SmartDashboard.putString(Constants.SmartDashboardKeys.ROBOT_OD_POSE, getODPose().toString());
     SmartDashboard.putString(Constants.SmartDashboardKeys.ROBOT_POSE, getPose().toString());
     SmartDashboard.putNumber(Constants.SmartDashboardKeys.DRIVEBASE_CURRENT, getDrivetrainCurrent());

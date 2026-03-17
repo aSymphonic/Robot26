@@ -67,12 +67,12 @@ public final class Constants {
 
     public static int SHOOTER_UPPER_BEAM_BREAK_PORT = 3;
 
-    public static int SHOOTER_FLYWHEEL_CURRENT_LIMIT = 35;
+    public static int SHOOTER_FLYWHEEL_CURRENT_LIMIT = 30;
     public static int SHOOTER_INFEED_CURRENT_LIMIT = 40;
     public static int SHOOTER_HOOD_CURRENT_LIMIT = 5;
     public static int INTAKE_CURRENT_LIMIT = 20;
     public static int INTAKE_PIVIT_CURRENT_LIMIT = 5;
-    public static int LOWER_ROLLERS_CURRENT_LIMIT = 30;
+    public static int LOWER_ROLLERS_CURRENT_LIMIT = 25;
 
     public static double HOOD_GEAR_RATIO = 3.0/8.0;
     public static double HOOD_DOWN_ANGLE_DEGREES = 15;
@@ -222,7 +222,8 @@ public final class Constants {
     // PID constants for Intake
     public static final double INTAKE_kP = 0.8;
 
-    public static final int INFEED_DEFAULT_TARGET_RPM = 5500;
+    public static final int INFEED_DEFAULT_TARGET_RPM = 4000;
+    public static final int LOWER_ROLLERS_DEFAULT_TARGET_RPM = 1000;
     // PID constants for Shooter Infeed
     public static final double INFEED_kP = 0.8;
 

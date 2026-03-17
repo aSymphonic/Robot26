@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -175,6 +176,7 @@ public class Shooter extends SubsystemBase {
 
         currentRPM = measuredRps * 60.0;
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.FLYWHEEL_MEASURED_RPM_LEGACY, currentRPM);
+        SmartDashboard.putNumber(Constants.SmartDashboardKeys.FLYWHEEL_MEASURED_RPM, currentRPM);
 
         // -------- Shuffleboard tuning --------
 
@@ -210,7 +212,7 @@ public class Shooter extends SubsystemBase {
             targetRPS = targetRPM / 60.0;
             MotionMagicVelocityVoltage req =
                     new MotionMagicVelocityVoltage(targetRPS)
-                            .withSlot(Constants.FLYWHEEL_PID_SLOT);
+                            .withSlot(Constants.FLYWHEEL_PID_SLOT).withEnableFOC(true);
 
             this.flywheelMotorTopLeft.setControl(req);
             this.flywheelMotorTopRight.setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Opposed));
@@ -226,8 +228,6 @@ public class Shooter extends SubsystemBase {
             this.flywheelMotorBottomLeft.setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Aligned));
             this.flywheelMotorBottomRight.setControl(new Follower(flywheelMotorTopLeft.getDeviceID(), MotorAlignmentValue.Opposed));
         }
-
-        SmartDashboard.putNumber(Constants.SmartDashboardKeys.FLYWHEEL_MEASURED_RPM, currentRPM);
 
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.INFEED_RPM, getInfeedRPM());
 
@@ -618,6 +618,7 @@ public class Shooter extends SubsystemBase {
         double error = targetRPM - currentRPM;
         double adjustment = Constants.INFEED_kP * error; // Adjustment to approach target
         double newRPM = targetRPM + adjustment; // Adjust current RPM towards target
+                                                
         this.infeedMotorLeft.set(newRPM / Constants.KRAKEN_X44_MAX_THEORETICAL_RPM);
         this.infeedMotorRight.setControl(new Follower(this.infeedMotorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
     }
