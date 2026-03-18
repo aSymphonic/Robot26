@@ -360,7 +360,8 @@ public class RobotContainer {
         .onFalse(new InstantCommand(intake::stopIntake));
 
     new Trigger(() -> driverController.getBButton())
-        .onTrue(new InstantCommand(visionSubsystem::resetYaw));
+        .onTrue(new InstantCommand(visionSubsystem::resetYaw))
+        .onTrue(new InstantCommand(drivebase::resetFieldOrientation));
 
     new Trigger(() -> driverController.getYButton())
         .onTrue(new InstantCommand(shooter::reverseInfeed))
