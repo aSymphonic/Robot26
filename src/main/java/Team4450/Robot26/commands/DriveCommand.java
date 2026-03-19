@@ -100,7 +100,8 @@ public class DriveCommand extends Command {
             }
             // If there IS input, set the target heading to where the joystick is facing in relation to the driver
         } else {
-            targetHeading = -Math.toDegrees(Math.atan2(rotationYSupplier.getAsDouble(), rotationXSupplier.getAsDouble())) - 90;
+            // targetHeading = -Math.toDegrees(Math.atan2(rotationYSupplier.getAsDouble(), rotationXSupplier.getAsDouble())) - 90;
+            targetHeading = drivebase.getAngleToAim(hubPosition);
         }
 
         targetHeading = normalizeAngle(targetHeading);
