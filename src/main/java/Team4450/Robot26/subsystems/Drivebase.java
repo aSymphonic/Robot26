@@ -426,6 +426,7 @@ public class Drivebase extends SubsystemBase {
     // Basic vision update that just sets the pose, this is good enough for testing
     // if it is working
     this.limelightPoseEstimate = pose;
+    this.sdsDrivebase.addVisionMeasurement(pose, timestampSeconds);
   }
 
   /**
@@ -438,9 +439,7 @@ public class Drivebase extends SubsystemBase {
    * @param targetPose A Pose2d where you want to aim
    * @return An angle (0-360) for the robot to aim, accounting for velocity
    */
-  public double getAngleToAim(Pose2d targetPose) {
-    Pose2d currentPose = getPose();
-
+  public double getAngleToAim(Pose2d currentPose, Pose2d targetPose) {
     double deltaX = targetPose.getX() - currentPose.getX();
     double deltaY = targetPose.getY() - currentPose.getY();
 
@@ -448,80 +447,6 @@ public class Drivebase extends SubsystemBase {
     angleToAim = Math.toDegrees(Math.atan2(deltaY, deltaX));
 
     return angleToAim;
-  }
-
-  /**
-   * This function converts an ideal target position into a virtual position
-   * offset with robot velocity
-   * <p>
-   * This function is secondary to {@link #getAngleToAim}, and should likely not
-   * be used
-   * 
-   * @param targetPose A Pose2d where you want to aim
-   * @return A "fake" position to aim accounting for velocity
-   **/
-  public Pose2d getPoseToAim(Pose2d targetPose) {
-    Pose2d currentPose = getPose();
-    Pose2d offsetTargetPose;
-
-    double deltaX = targetPose.getX() - currentPose.getX();
-    double deltaY = targetPose.getY() - currentPose.getY();
-
-    double distance = Math.hypot(deltaX, deltaY);
-
-    double airTime;
-
-    int lowerPointIndex = 0;
-    double lowerPoint = FLYWHEEL_SPEED_DISTANCE_TABLE[lowerPointIndex];
-
-    int higherPointIndex = FLYWHEEL_SPEED_DISTANCE_TABLE.length - 1;
-    double higherPoint = FLYWHEEL_SPEED_DISTANCE_TABLE[higherPointIndex];
-
-    double currentDistance;
-    for (int i = FLYWHEEL_SPEED_DISTANCE_TABLE.length - 2; i > 0; i--) {
-      currentDistance = FLYWHEEL_SPEED_DISTANCE_TABLE[i];
-      if (currentDistance > distance) {
-        if (currentDistance < higherPoint) {
-          higherPoint = currentDistance;
-          higherPointIndex = i;
-        }
-      } else if (currentDistance < distance) {
-        if (currentDistance >= lowerPoint) {
-          lowerPoint = currentDistance;
-          lowerPointIndex = i;
-        }
-      } else {
-        airTime = FUEL_AIR_TIME_TABLE_SEC[i];
-
-        // double xVelocityOffset = fieldRelativeVelocityX * airTime;
-        // double yVelocityOffset = fieldRelativeVelocityY * airTime;
-
-        // offsetTargetPose = new Pose2d(targetPose.getX() - xVelocityOffset,
-        // targetPose.getY() - yVelocityOffset,
-        // targetPose.getRotation());
-
-        return targetPose;
-      }
-    }
-
-    double lowerTime = FUEL_AIR_TIME_TABLE_SEC[lowerPointIndex];
-    double higherTime = FUEL_AIR_TIME_TABLE_SEC[higherPointIndex];
-
-    if (higherPoint == lowerPoint) {
-      airTime = lowerTime;
-    } else {
-      airTime = lowerTime + ((higherTime - lowerTime) * (distance - lowerPoint) / (higherPoint - lowerPoint));
-    }
-
-    // double xVelocityOffset = fieldRelativeVelocityX * airTime;
-    // double yVelocityOffset = fieldRelativeVelocityY * airTime;
-
-    // offsetTargetPose = new Pose2d(targetPose.getX() - xVelocityOffset,
-    // targetPose.getY() - yVelocityOffset,
-    // targetPose.getRotation());
-
-    // return offsetTargetPose;
-    return targetPose;
   }
 
   // Get the distance in meters between the current robot position and the target

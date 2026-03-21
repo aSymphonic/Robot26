@@ -125,7 +125,7 @@ public final class Constants {
 
   // The rotation values are in radians
 
-  public static Pose3d ROBOT_TO_QUEST = new Pose3d(0, 0, 0,
+  public static Pose3d ROBOT_TO_QUEST = new Pose3d(0.305, 0, 0,
       new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0)));
 
   public static Pose3d ROBOT_TO_LIMELIGHT_FRONT = new Pose3d(0.305, 0, 0, new Rotation3d(0, -0.3491, 0));
