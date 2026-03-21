@@ -74,7 +74,7 @@ public final class Constants {
 
     public static int SHOOTER_FLYWHEEL_CURRENT_LIMIT = 35;
     public static int SHOOTER_INFEED_CURRENT_LIMIT = 40;
-    public static int SHOOTER_HOOD_CURRENT_LIMIT = 5;
+    public static int SHOOTER_HOOD_CURRENT_LIMIT = 8;
     public static int INTAKE_CURRENT_LIMIT = 20;
     public static int INTAKE_PIVIT_CURRENT_LIMIT = 5;
     public static int LOWER_ROLLERS_CURRENT_LIMIT = 25;
