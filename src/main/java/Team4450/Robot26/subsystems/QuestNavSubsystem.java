@@ -106,7 +106,7 @@ public class QuestNavSubsystem extends SubsystemBase {
                         // drivebase.pigeonWrapper.setCurrentYaw(drivebase.limelightPoseEstimate.getRotation().getDegrees());
                         drivebase.limelightPoseEstimate = nullPose2d;
                         this.lastResetTime = System.currentTimeMillis();
-                        // }
+                        }
                 } else {
                     this.lastResetTime = System.currentTimeMillis();
                 }
@@ -140,5 +140,4 @@ public class QuestNavSubsystem extends SubsystemBase {
             }
         }
     }
-}
 }
