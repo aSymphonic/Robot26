@@ -63,6 +63,8 @@ public class DriveCommand extends Command {
 
         if (robot.isAutonomous()) return; // We do not want to run the drive command if we are in auto
 
+        // Somewhere in here for the pose estimate for the robot there is a problem where on the red side the robot seems to point to the left. There does not seem to be a problem with the blue side
+
         // This finds where the correct hub position is
         Pose2d hubPosition;
         if (alliance == DriverStation.Alliance.Blue) {

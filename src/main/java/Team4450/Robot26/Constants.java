@@ -165,14 +165,11 @@ public final class Constants {
     public static double HUB_RED_Y = 4.034;
 
     // Blue
-    // Comment out the not welded field
-    // public static Pose2d HUB_BLUE_ANDYMARK_POSE = new Pose2d(4.611, 4.021,
-    // Rotation2d.kZero);
-    public static Pose2d HUB_BLUE_WELDED_POSE = new Pose2d(4.625, 4.034, Rotation2d.kZero);
+    public static Pose2d HUB_BLUE_WELDED_POSE = new Pose2d(HUB_BLUE_X, HUB_BLUE_Y, Rotation2d.kZero);
     // Red
-    // public static Pose2d HUB_RED_ANDYMARK_POSE = new Pose2d(11.901, 4.021,
-    // Rotation2d.kZero);
-    public static Pose2d HUB_RED_WELDED_POSE = new Pose2d(11.915, 4.034, Rotation2d.kZero);
+    // public static Pose2d HUB_RED_WELDED_POSE = new Pose2d(HUB_RED_X, HUB_RED_Y, Rotation2d.kZero);
+    // Shift to the right
+    public static Pose2d HUB_RED_WELDED_POSE = new Pose2d(HUB_RED_X, HUB_RED_Y + 0.4, Rotation2d.kZero);
 
     public static double NEUTRAL_BLUE_ZONE_BARRIER_X = 4.572;
     public static double NEUTRAL_RED_ZONE_BARRIER_X = 11.938;
