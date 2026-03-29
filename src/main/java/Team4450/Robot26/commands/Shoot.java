@@ -14,6 +14,7 @@ public class Shoot extends Command {
     private Intake intake;
     private Timer timer;
     private Timer pivitDelay;
+    private Timer xTimer;
 
     public Shoot(Drivebase drivebase, Shooter shooter, Hopper hopper, Intake intake) {
         this.shooter = shooter;
@@ -22,6 +23,7 @@ public class Shoot extends Command {
         this.intake = intake;
         this.timer = new Timer();
         this.pivitDelay = new Timer();
+        this.xTimer = new Timer();
     }
 
     @Override
@@ -33,12 +35,18 @@ public class Shoot extends Command {
         timer.reset();
         pivitDelay.start();
         pivitDelay.reset();
+        xTimer.start();
+        xTimer.reset();
         intake.slowIntake();
     }
 
     @Override
     public void execute() {
-        drivebase.setX();
+        if (this.xTimer.hasElapsed(0.5)) {
+            drivebase.setX();
+            this.xTimer.reset();
+        }
+
         if (this.shooter.flywheelAtSpeed()) {
             shooter.startInfeed();
             hopper.start();
