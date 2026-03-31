@@ -255,7 +255,6 @@ public final class Constants {
         public static final String HOOD_ANGLE = "Hood Angle";
         public static final String HOOD_MOTOR_POSITION = "Hood Motor Position";
         public static final String HOOD_TARGET_POSITION = "Hood Target Position";
-        public static final String HOOD_POWER = "Hood Power";
 
         // Flywheel telemetry
         public static final String FLYWHEEL_TARGET_RPM = "Flywheel/TargetRPM";

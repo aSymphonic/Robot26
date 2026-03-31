@@ -136,7 +136,6 @@ public class Shooter extends SubsystemBase {
 
         sdInit = true;
 
-        SmartDashboard.putNumber(Constants.SmartDashboardKeys.HOOD_POWER, 0.05);
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.INFEED_TARGET_RPM, Constants.INFEED_DEFAULT_TARGET_RPM);
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISABLE_AUTO_FLYWHEEL_UPDATE, this.disableAutomaticFlywheelUpdate);
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.MANUAL_DISTANCE_ONE, this.manualDistanceOne);
@@ -148,8 +147,6 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // Flywheel is controlled by TestSubsystem via Constants; no dashboard reads here.
-        
         // This line should be all that is needed when the flywheel should be spun up
         updateLaunchValues(true);
 

@@ -68,7 +68,7 @@ public class Shoot extends Command {
         }
 
         if (!this.shooter.flywheelWithinSpeed()) {
-            SmartDashboard.putNumber(Constants.SmartDashboardKeys.INFEED_TARGET_RPM, Constants.INFEED_DEFAULT_TARGET_RPM - shooter.flywheelRPMError);
+            SmartDashboard.putNumber(Constants.SmartDashboardKeys.INFEED_TARGET_RPM, (Constants.INFEED_DEFAULT_TARGET_RPM - shooter.flywheelRPMError));
         }
 
         if (timer.hasElapsed(0.5) && pivitDelay.hasElapsed(2)) {

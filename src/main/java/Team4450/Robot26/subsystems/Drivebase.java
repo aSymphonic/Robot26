@@ -174,6 +174,8 @@ public class Drivebase extends SubsystemBase {
         SmartDashboard.putString(Constants.SmartDashboardKeys.ROBOT_OD_POSE, getODPose().toString());
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.DRIVEBASE_CURRENT, getDrivetrainCurrent());
         SmartDashboard.putString(Constants.SmartDashboardKeys.LIMELIGHT_POSE, this.limelightPoseEstimate.toString());
+        SmartDashboard.putNumber("Flywheel Error", RobotContainer.shooter.flywheelRPMError);
+        
     }
   }
 
