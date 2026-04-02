@@ -18,5 +18,7 @@ Auto score function that will combine hub tracking and run the shoot function
 
 Calibrated bump speed? Just set slow mode to something that will work
 
+Beam break intigration
+
 Things to test at the practice field:
     Going over the bump
