@@ -122,7 +122,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.HOOD_POSITION, 0);
 
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.FLYWHEEL_TARGET_RPM, Constants.FLYWHEEL_TARGET_RPM);
-        SmartDashboard.putNumber(Constants.SmartDashboardKeys.FLYWHEEL_CURVE_MULTIPLIER, 22);
 
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.FLYWHEEL_KP, Constants.FLYWHEEL_kP);
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.FLYWHEEL_KI, Constants.FLYWHEEL_kI);
@@ -215,16 +214,12 @@ public class Shooter extends SubsystemBase {
         flywheelRPMError = targetRPM - currentRPM;
 
         double targetRPS;
-        double curveMultiplier = currentRPM < 2500 ? 150 : 35.25; // Allowed acceleration in rps/s for slow acceleration
-        SmartDashboard.putNumber("Shooter Curve Multiplier", curveMultiplier);
 
         if (flywheelEnabled && canFlywheel) {
             targetRPS = targetRPM / 60.0;
             SmartDashboard.putNumber("Target Flywheel RPS", targetRPS);
 
-            MotionMagicVelocityVoltage req = slowAcceleration ? new MotionMagicVelocityVoltage(targetRPS)
-                            .withSlot(Constants.FLYWHEEL_PID_SLOT).withEnableFOC(true).withAcceleration(curveMultiplier) :
-                    new MotionMagicVelocityVoltage(targetRPS)
+            MotionMagicVelocityVoltage req = new MotionMagicVelocityVoltage(targetRPS)
                             .withSlot(Constants.FLYWHEEL_PID_SLOT).withEnableFOC(true);
 
             this.flywheelMotorTopLeft.setControl(req);
@@ -355,14 +350,6 @@ public class Shooter extends SubsystemBase {
         } else {
             return false;
         }
-    }
-
-    public void enableSlowAcceleration() {
-        slowAcceleration = true;
-    }
-
-    public void disableSlowAcceleration() {
-        slowAcceleration = false;
     }
 
     public void enabledHood() {
