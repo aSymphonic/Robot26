@@ -69,7 +69,7 @@ public class Shoot extends Command {
             SmartDashboard.putNumber(Constants.SmartDashboardKeys.INFEED_TARGET_RPM, (Constants.INFEED_DEFAULT_TARGET_RPM - shooter.flywheelRPMError));
         }
 
-        if (pviotIncrementTimer.hasElapsed(0.25) && pivotDelay.hasElapsed(2) && SmartDashboard.getNumber(Constants.SmartDashboardKeys.PIVOT_POSITION, 0) > 0.1) {
+        if (pviotIncrementTimer.hasElapsed(0.2) && pivotDelay.hasElapsed(1) && SmartDashboard.getNumber(Constants.SmartDashboardKeys.PIVOT_POSITION, 0) > 0.1) {
             intake.incrementPivitUp(0.05);
             pviotIncrementTimer.reset();
             
