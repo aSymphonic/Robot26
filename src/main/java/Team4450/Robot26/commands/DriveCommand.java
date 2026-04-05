@@ -90,6 +90,7 @@ public class DriveCommand extends Command {
             } else if (drivebase.ferryTracking) {
                 targetHeading = 180;
             } else {
+                // Compass mode
                 targetHeading = drivebase.getAngleToAim(drivebasePose, hubPosition);
             }
         }
