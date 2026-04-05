@@ -351,9 +351,6 @@ public class RobotContainer {
         // Toggle slow-mode
         // Right D-Pad button sets X pattern to stop movement.
 
-        new Trigger(() -> driverController.getLeftBumperButton()) // Rich
-                .onChange(new InstantCommand(drivebase::toggleSlowMode));
-
         new Trigger(() -> driverController.getPOV() == 0) // Up D-pad
                 .onTrue(new InstantCommand(shooter::toggleManualDistanceOne))
                 .onTrue(new InstantCommand(shooter::disableManualDistanceTwo))
@@ -375,6 +372,9 @@ public class RobotContainer {
         new Trigger(() -> driverController.getRightBumperButton())
                 .onTrue(new InstantCommand(intake::togglePivit));
 
+        new Trigger(() -> driverController.getLeftBumperButton()) // Rich
+                .onChange(new InstantCommand(drivebase::toggleSlowMode));
+
         new Trigger(() -> driverController.getLeftTrigger())
                 .whileTrue(new Shoot(drivebase, shooter, hopper, intake));
 
@@ -385,9 +385,14 @@ public class RobotContainer {
         new Trigger(() -> driverController.getAButton())
                 .onTrue(new InstantCommand(drivebase::setBumpHappened));
 
+        new Trigger(() -> driverController.getBButton())
+                .onTrue(new InstantCommand(visionSubsystem::resetYaw))
+                .onTrue(new InstantCommand(drivebase::resetFieldOrientation));
+
         // new Trigger(() -> driverController.getBButton())
-        // .onTrue(new InstantCommand(visionSubsystem::resetYaw))
-        // .onTrue(new InstantCommand(drivebase::resetFieldOrientation));
+        // .onTrue(new InstantCommand(drivebase::enableHubTracking))
+        // .whileTrue(new Shoot(drivebase, shooter, hopper, intake))
+        // .onFalse(new InstantCommand(drivebase::disableHubTracking));
 
         new Trigger(() -> driverController.getYButton())
                 .onTrue(new InstantCommand(shooter::reverseInfeed))
@@ -399,21 +404,22 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(drivebase::toggleHubTracking));
 
         new Trigger(() -> driverController.getLeftStickButton())
-                .onTrue(new InstantCommand(drivebase::setWallTrackingLeft))
-                .onTrue(new InstantCommand(drivebase::enableHubTracking))
-                .onFalse(new InstantCommand(drivebase::clearWallTacking))
-                .onFalse(new InstantCommand(drivebase::disableHubTracking));
-
-        new Trigger(() -> driverController.getRightStickButton())
-                .onTrue(new InstantCommand(drivebase::setWallTrackingRight))
-                .onTrue(new InstantCommand(drivebase::enableHubTracking))
-                .onFalse(new InstantCommand(drivebase::clearWallTacking))
-                .onFalse(new InstantCommand(drivebase::disableHubTracking));
-
-        new Trigger(() -> driverController.getBButton())
+                // .onTrue(new InstantCommand(drivebase::setWallTrackingLeft))
+                // .onTrue(new InstantCommand(drivebase::enableHubTracking))
+                // .onFalse(new InstantCommand(drivebase::clearWallTacking))
+                // .onFalse(new InstantCommand(drivebase::disableHubTracking));
                 .onTrue(new InstantCommand(drivebase::enableHubTracking))
                 .whileTrue(new Shoot(drivebase, shooter, hopper, intake))
                 .onFalse(new InstantCommand(drivebase::disableHubTracking));
+
+        new Trigger(() -> driverController.getRightStickButton())
+                // .onTrue(new InstantCommand(drivebase::setWallTrackingRight))
+                // .onTrue(new InstantCommand(drivebase::enableHubTracking))
+                // .onFalse(new InstantCommand(drivebase::clearWallTacking))
+                // .onFalse(new InstantCommand(drivebase::disableHubTracking));
+                .onTrue(new InstantCommand(intake::startIntake))
+                .onFalse(new InstantCommand(intake::stopIntake));
+
     }
 
     /**
