@@ -168,10 +168,11 @@ public class Drivebase extends SubsystemBase {
         SmartDashboard.putBoolean(Constants.SmartDashboardKeys.DISTANCE_BOX, false);
     }
 
+    SmartDashboard.putNumber(Constants.SmartDashboardKeys.BATTERY_VOLTAGE, RobotController.getBatteryVoltage());
+
     if (RobotContainer.inTestMode) {
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.Gyro_HEADING, pigeonWrapper.startingYaw);
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.GYRO_STARTING_YAW, pigeonWrapper.getHeading());
-        SmartDashboard.putNumber(Constants.SmartDashboardKeys.BATTERY_VOLTAGE, RobotController.getBatteryVoltage());
         SmartDashboard.putString(Constants.SmartDashboardKeys.ROBOT_OD_POSE, getODPose().toString());
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.DRIVEBASE_CURRENT, getDrivetrainCurrent());
         SmartDashboard.putString(Constants.SmartDashboardKeys.LIMELIGHT_POSE, this.limelightPoseEstimate.toString());

@@ -90,8 +90,8 @@ public class DriveCommand extends Command {
             } else if (drivebase.ferryTracking) {
                 targetHeading = 180;
             } else {
-                // Compass mode
-                targetHeading = drivebase.getAngleToAim(drivebasePose, hubPosition);
+                // targetHeading = drivebase.getAngleToAim(drivebasePose, hubPosition);
+                targetHeading = -Math.toDegrees(Math.atan2(rotationYSupplier.getAsDouble(), rotationXSupplier.getAsDouble())) - 90;
             }
         }
 

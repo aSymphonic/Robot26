@@ -1,0 +1,104 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.6423903917223024,
+        "y": 2.4837692732095684
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.526192704407105,
+        "y": 2.2749152386078904
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.270218263892481,
+        "y": 3.6986180483357503
+      },
+      "prevControl": {
+        "x": 5.702801806276086,
+        "y": 3.1636253882974343
+      },
+      "nextControl": {
+        "x": 6.735654832159289,
+        "y": 4.137458241273027
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 9.12,
+        "y": 3.9905256435231733
+      },
+      "prevControl": {
+        "x": 6.6292693308411605,
+        "y": 4.026640010733311
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Center Park"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "intakeDown",
+      "waypointRelativePos": 0.45,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "intakeDown"
+        }
+      }
+    },
+    {
+      "name": "intake",
+      "waypointRelativePos": 1.25,
+      "endWaypointRelativePos": 1.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "intake"
+        }
+      }
+    },
+    {
+      "name": "spinShooter",
+      "waypointRelativePos": 1.65,
+      "endWaypointRelativePos": 1.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "spinShooter"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.2,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 270.0,
+    "maxAngularAcceleration": 270.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 1.0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 2.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

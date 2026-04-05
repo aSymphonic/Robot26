@@ -243,7 +243,7 @@ public final class Constants {
     public static final double INTAKE_kP = 0.8;
 
     public static final int INFEED_DEFAULT_TARGET_RPM = 3500;
-    public static final int LOWER_ROLLERS_DEFAULT_TARGET_RPM = 1000;
+    public static final int LOWER_ROLLERS_DEFAULT_TARGET_RPM = 2000;
     // PID constants for Shooter Infeed
     public static final double INFEED_kP = 0.8;
 
@@ -353,10 +353,10 @@ public final class Constants {
         // for
         // full weight robot.
         public static final double kDriveReductionPct = 1; // Percentage of max linear speed. e.g. .50 == 50%
-        public static final double kRotationReductionPct = .50; // Percentage of max rotational speed. e.g. .70 == 70%
+        public static final double kRotationReductionPct = .75; // Percentage of max rotational speed. e.g. .70 == 70%
 
         // Factors used to slow robot speed for fine driving.
-        public static final double kSlowModeLinearPct = .35; // 15% of max linear speed.
+        public static final double kSlowModeLinearPct = .40; // 15% of max linear speed.
         public static final double kSlowModeRotationPct = .40; // 40% of max rotational speed.
 
         // Drive Motor ramp rate. Needs to be tuned for full weight robot.
