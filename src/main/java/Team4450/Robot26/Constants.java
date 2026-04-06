@@ -192,7 +192,7 @@ public final class Constants {
     public static boolean HUB_TRACKING = false;
 
     // Interpolation table
-    public static double[] FLYWHEEL_SPEED_TABLE = { 3550, 3550, 3650, 3850, 4050, 4300, 4400, 4400 }; // Converted from
+    public static double[] FLYWHEEL_SPEED_TABLE = { 3550, 3550, 3650, 3850, 4050, 4300, 4400, 3200 }; // Converted from
                                                                                                 // percentages to
     // RPM
     public static double[] FLYWHEEL_SPEED_DISTANCE_TABLE = { 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5.5 };
@@ -243,7 +243,7 @@ public final class Constants {
     public static final double INTAKE_kP = 0.8;
 
     public static final int INFEED_DEFAULT_TARGET_RPM = 3500;
-    public static final int LOWER_ROLLERS_DEFAULT_TARGET_RPM = 2000;
+    public static final int LOWER_ROLLERS_DEFAULT_TARGET_RPM = 1500;
     // PID constants for Shooter Infeed
     public static final double INFEED_kP = 0.8;
 
@@ -280,8 +280,6 @@ public final class Constants {
         public static final String MANUAL_DISTANCE_ONE = "disableAutomaticDistanceUpdate";
         public static final String MANUAL_DISTANCE_TWO = "disableAutomaticDistanceUpdateTwo";
         public static final String MANUAL_DISTANCE_THREE = "disableAutomaticDistanceUpdateThree";
-        public static final String ROBOT_LAUNCH_X = "RobotLaunchX";
-        public static final String ROBOT_LAUNCH_Y = "RobotLaunchY";
         public static final String GOAL_POSE = "Goal Pose";
         public static final String ROBOT_DISTANCE = "Robot Distance";
         public static final String FLIP_AUTO = "Flip Auto";

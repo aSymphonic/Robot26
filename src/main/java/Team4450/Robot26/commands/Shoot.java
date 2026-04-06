@@ -65,6 +65,12 @@ public class Shoot extends Command {
             shooter.startInfeed();
         }
 
+        if (this.shooter.flywheelTooLow()) {
+            shooter.stopInfeed();
+        } else {
+            shooter.startInfeed();
+        }
+
         if (!this.shooter.flywheelWithinSpeed()) {
             SmartDashboard.putNumber(Constants.SmartDashboardKeys.INFEED_TARGET_RPM, (Constants.INFEED_DEFAULT_TARGET_RPM - Math.max(shooter.flywheelRPMError * 5, 0)));
         }
