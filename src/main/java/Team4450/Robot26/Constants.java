@@ -76,7 +76,7 @@ public final class Constants {
     public static int SHOOTER_INFEED_CURRENT_LIMIT = 40;
     public static int SHOOTER_HOOD_CURRENT_LIMIT = 8;
     public static int INTAKE_CURRENT_LIMIT = 30;
-    public static int INTAKE_PIVOT_CURRENT_LIMIT = 5;
+    public static int INTAKE_PIVOT_CURRENT_LIMIT = 8;
     public static int LOWER_ROLLERS_CURRENT_LIMIT = 25;
 
     public static double HOOD_GEAR_RATIO = 3.0 / 8.0;
@@ -102,7 +102,7 @@ public final class Constants {
     public static int INTAKE_GEAR_RATIO = 1 / 1;
     // I was told that the gear box on the Kraken is a 25:1
     // public static int INTAKE_PIVOT_GEAR_RATIO = (25 / 1) * (32 / 16);
-    public static double INTAKE_PIVOT_GEAR_RATIO = (62.4 / 1);
+    public static double INTAKE_PIVOT_GEAR_RATIO = (30 / 1);
 
     public static int INTAKE_MAX_THEORETICAL_RPM = KRAKEN_X44_MAX_THEORETICAL_RPM / INTAKE_GEAR_RATIO;
     public static double INTAKE_MAX_THEORETICAL_PIVOT_RPM = KRAKEN_X60_MAX_THEORETICAL_RPM / INTAKE_PIVOT_GEAR_RATIO;
@@ -112,7 +112,7 @@ public final class Constants {
     public static int INTAKE_PIVOT_MOTOR_POSITION_UP = 0;
     public static double INTAKE_PIVOT_TARGET_POSITION_DOWN = 1.0;
     // This is an assumed value and not exact
-    public static double INTAKE_PIVOT_POSITION_DOWN_DEGREES = 105;
+    public static double INTAKE_PIVOT_POSITION_DOWN_DEGREES = 100;
     // The format of this value is in rotations of the pivit motor
     public static double INTAKE_PIVOT_MOTOR_POSITION_DOWN = (INTAKE_PIVOT_POSITION_DOWN_DEGREES / 360)
             * INTAKE_PIVOT_GEAR_RATIO;
