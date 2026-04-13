@@ -301,9 +301,15 @@ public final class Constants {
         public static final String PIVOT_CURRENT_POSITION = "Pivit Current Position";
         public static final String PIVOT_CURRENT_DRAW = "Pivit Current Draw";
 
-        //Intake
+        // Intake
         public static final String INTAKE_CURRENT_DRAW = "Intake Current Draw";
         
+        // Quest
+        public static final String QUEST_CONNECTED = "Quest Connected";
+        public static final String QUEST_TRACKING = "Quest Tracking";
+        public static final String QUEST_LOW_BATTERY = "Quest Low Battery";
+        public static final String QUEST_BATTERY_PERCENTAGE = "Quest Battery Percentage";
+        public static final String QUEST_POSE = "Quest Pose";
 
         // Control Flow
         public static final String DISABLED = "Disabled";
@@ -312,11 +318,6 @@ public final class Constants {
         public static final String PROGRAM = "Program";
         public static final String FMS = "FMS";
         public static final String AUTONOMOUS_ACTIVE = "Autonomous Active";
-
-        // Quest
-        public static final String QUEST_CONNECTED = "Quest Connected";
-        public static final String QUEST_TRACKING = "Quest Tracking";
-        public static final String QUEST_POSE = "Quest Pose";
 
         // Vision
         public static final String SEND_FRONT_LIMELIGHT_INFO = "Send Front Limelight info";
