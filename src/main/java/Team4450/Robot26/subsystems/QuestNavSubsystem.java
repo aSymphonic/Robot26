@@ -3,20 +3,33 @@ package Team4450.Robot26.subsystems;
 import Team4450.Robot26.Constants;
 import Team4450.Robot26.RobotContainer;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import gg.questnav.questnav.PoseFrame;
 import gg.questnav.questnav.QuestNav;
-import Team4450.Lib.Util;
-import Team4450.Robot26.utility.ConsoleEveryX;
-import edu.wpi.first.math.geometry.Pose2d;
 
 public class QuestNavSubsystem extends SubsystemBase {
-    QuestNav questNav = new QuestNav(); 
+    QuestNav questNav;
 
+    public QuestNavSubsystem() {
+        questNav = new QuestNav(); 
+
+        questNav.setVersionCheckEnabled(false);
+
+        SmartDashboard.putBoolean(Constants.SmartDashboardKeys.QUEST_CONNECTED, false);
+        SmartDashboard.putBoolean(Constants.SmartDashboardKeys.QUEST_TRACKING, false);
+        SmartDashboard.putBoolean(Constants.SmartDashboardKeys.QUEST_LOW_BATTERY, false);
+
+        questNav.onConnected(() -> SmartDashboard.putBoolean(Constants.SmartDashboardKeys.QUEST_CONNECTED, true));
+        questNav.onDisconnected(() -> SmartDashboard.putBoolean(Constants.SmartDashboardKeys.QUEST_CONNECTED, false));
+
+        questNav.onTrackingAcquired(() -> SmartDashboard.putBoolean(Constants.SmartDashboardKeys.QUEST_TRACKING, true));
+        questNav.onTrackingLost(() -> SmartDashboard.putBoolean(Constants.SmartDashboardKeys.QUEST_TRACKING, false));
+        questNav.onLowBattery(20, level -> SmartDashboard.putBoolean(Constants.SmartDashboardKeys.QUEST_LOW_BATTERY, true));
+
+        // Initialize a blank pose3d
+        questNav.setPose(new Pose3d());
+    }
     @Override
     public void periodic() {
         questNav.commandPeriodic();
