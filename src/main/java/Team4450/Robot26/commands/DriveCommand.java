@@ -79,7 +79,7 @@ public class DriveCommand extends Command {
 
         // Decides where to track
         // If both inputs are zero and the alliance is blue then
-        Pose2d drivebasePose = drivebase.getODPose();
+        Pose2d drivebasePose = drivebase.getPose();
 
         if (!drivebase.wallTrackingLeft && !drivebase.wallTrackingRight) {
             if (Math.abs(rotationXSupplier.getAsDouble()) <= 0.2 && Math.abs(rotationYSupplier.getAsDouble()) <= 0.2 && alliance == DriverStation.Alliance.Blue) {
