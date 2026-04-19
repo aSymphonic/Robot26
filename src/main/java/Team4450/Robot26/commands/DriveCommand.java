@@ -170,7 +170,7 @@ public class DriveCommand extends Command {
             double yDiff = Math.abs(goalPose.getY() - drivebase.getPose().getY());
             double distToGoal = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 
-            if (distToGoal < 2 && Math.abs(headingError) < 8) {
+            if (distToGoal < 2 && Math.abs(headingError) < 7) {
                 rotation = 0;
                 drivebase.setX();
             } else if (distToGoal > 2 && distToGoal < 4 && Math.abs(headingError) < 5) {

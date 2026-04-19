@@ -192,7 +192,7 @@ public final class Constants {
     public static boolean HUB_TRACKING = false;
 
     // Interpolation table
-    public static double[] FLYWHEEL_SPEED_TABLE = { 3650, 3650, 3750, 3950, 4150, 4400, 4500, 3300 }; // Converted from
+    public static double[] FLYWHEEL_SPEED_TABLE = { 3650, 3650, 3750, 3950, 4150, 4400, 4500, 4000 }; // Converted from
                                                                                                 // percentages to
     // RPM
     public static double[] FLYWHEEL_SPEED_DISTANCE_TABLE = { 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5.5 };

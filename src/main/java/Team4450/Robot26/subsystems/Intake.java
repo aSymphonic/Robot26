@@ -139,7 +139,7 @@ public class Intake extends SubsystemBase {
                 double maxRPM = Constants.INTAKE_DEFAULT_TARGET_RPM;
                 double minRPM = Constants.INTAKE_DEFAULT_MINIMUM_RPM;
                 // gets intake speed based off of robot speed. Faster robot = faster intake
-                double scaledIntakeSpeed = maxRPM - (maxRPM - minRPM) * ((2 * RobotContainer.drivebase.getTotalVelocity()) / 5.21);
+                double scaledIntakeSpeed = (maxRPM - minRPM) * ((2 * RobotContainer.drivebase.getTotalVelocity()) / 5.21);
                 SmartDashboard.putNumber("scaledIntakeSpeed", scaledIntakeSpeed);
                 if (this.reverseIntake) {
                     //set rpm to a value between max rpm and min rpm, scaled by robot speed
