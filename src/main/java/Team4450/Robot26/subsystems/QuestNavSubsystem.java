@@ -4,6 +4,7 @@ import static Team4450.Robot26.Constants.robot;
 
 import Team4450.Robot26.Constants;
 import Team4450.Robot26.RobotContainer;
+import Team4450.Robot26.Constants.SmartDashboardKeys;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -55,10 +56,9 @@ public class QuestNavSubsystem extends SubsystemBase {
             RobotContainer.drivebase.addQuestPose(robotPose.toPose2d(), timestamp);
 
             String robotPoseString = robotPose.toString();
-            SmartDashboard.putString(Constants.SmartDashboardKeys.QUEST_POSE, robotPoseString);
 
-            SmartDashboard.putNumber("Quest Battery Percentage", questNav.getBatteryPercent().getAsInt());
-            SmartDashboard.putBoolean("ROBOT IS USING QUEST", useQuest());
+            SmartDashboard.putString(Constants.SmartDashboardKeys.QUEST_POSE, robotPoseString);
+            SmartDashboard.putNumber(Constants.SmartDashboardKeys.QUEST_BATTERY_PERCENTAGE, questNav.getBatteryPercent().getAsInt());
         }
     }
 
@@ -77,9 +77,9 @@ public class QuestNavSubsystem extends SubsystemBase {
     }
 
     public boolean useQuest() {
-        if (SmartDashboard.getBoolean(Constants.SmartDashboardKeys.USE_QUEST, true)
-                && SmartDashboard.getBoolean(Constants.SmartDashboardKeys.QUEST_TRACKING, false)
-                && !questAgainstWall()) {
+        if (SmartDashboard.getBoolean(Constants.SmartDashboardKeys.USE_QUEST, true) &&
+                SmartDashboard.getBoolean(Constants.SmartDashboardKeys.QUEST_TRACKING, false) &&
+                !questAgainstWall()) {
             return true;
         } else {
             return false;

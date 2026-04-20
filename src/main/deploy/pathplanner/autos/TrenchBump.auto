@@ -25,6 +25,12 @@
                 "data": {
                   "name": "shoot"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "hubTrack"
+                }
               }
             ]
           }
@@ -49,6 +55,12 @@
                 "type": "named",
                 "data": {
                   "name": "shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "hubTrack"
                 }
               }
             ]

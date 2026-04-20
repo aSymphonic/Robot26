@@ -310,6 +310,8 @@ public final class Constants {
         public static final String QUEST_LOW_BATTERY = "Quest Low Battery";
         public static final String QUEST_BATTERY_PERCENTAGE = "Quest Battery Percentage";
         public static final String QUEST_POSE = "Quest Pose";
+        public static final String USE_QUEST = "Use QuestNav?";
+        public static final String ROBOT_CURRENTLY_USING_QUEST = "ROBOT IS USING QUEST";
 
         // Control Flow
         public static final String DISABLED = "Disabled";
@@ -322,7 +324,6 @@ public final class Constants {
         // Vision
         public static final String SEND_FRONT_LIMELIGHT_INFO = "Send Front Limelight info";
         public static final String SEND_RIGHT_LIMELIGHT_INFO = "Send Right Limelight info";
-        public static final String USE_QUEST = "Use QuestNav?";
 
         // Drivebase
         public static final String PIGEON_GYRO = "Pigeon Gyro";
