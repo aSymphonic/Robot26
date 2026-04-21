@@ -38,6 +38,7 @@ public class QuestNavSubsystem extends SubsystemBase {
         // Initialize a blank pose3d
         questNav.setPose(new Pose3d());
     }
+
     @Override
     public void periodic() {
         questNav.commandPeriodic();
