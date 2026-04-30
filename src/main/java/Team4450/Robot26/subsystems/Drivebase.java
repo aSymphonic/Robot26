@@ -380,7 +380,7 @@ public class Drivebase extends SubsystemBase {
             }
 
             SmartDashboard.putBoolean(Constants.SmartDashboardKeys.ROBOT_CURRENTLY_USING_QUEST, true);
-            return getODPose();
+            return RobotContainer.questNavSubsystem.getQuestPose();
 
         } else {
             SmartDashboard.putBoolean(Constants.SmartDashboardKeys.ROBOT_CURRENTLY_USING_QUEST, false);
