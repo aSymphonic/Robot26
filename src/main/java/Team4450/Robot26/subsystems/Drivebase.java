@@ -375,6 +375,7 @@ public class Drivebase extends SubsystemBase {
      */
     public Pose2d getPose() {
         if (RobotContainer.questNavSubsystem.useQuest()) {
+
             if(!SmartDashboard.getBoolean(Constants.SmartDashboardKeys.ROBOT_CURRENTLY_USING_QUEST, false)){ 
                 RobotContainer.questNavSubsystem.resetQuest2d(getODPose());
             }
