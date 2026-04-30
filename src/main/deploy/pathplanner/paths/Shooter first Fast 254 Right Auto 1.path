@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.440370213929547,
-        "y": 1.0195080130631924
+        "x": 5.717835497835498,
+        "y": 0.5601298701298709
       },
       "isLocked": false,
       "linkedName": "RS"
     },
     {
       "anchor": {
-        "x": 8.063863636363637,
-        "y": 0.7858982683982685
+        "x": 7.491888908617423,
+        "y": 1.031528764204546
       },
       "prevControl": {
-        "x": 7.730119047620006,
-        "y": 0.5503138528129159
+        "x": 7.158144319873792,
+        "y": 0.7959443486191935
       },
       "nextControl": {
-        "x": 8.423797890066343,
-        "y": 1.0399695063078
+        "x": 7.851823162320129,
+        "y": 1.2856000021140777
       },
       "isLocked": false,
       "linkedName": null
@@ -48,16 +48,16 @@
     },
     {
       "anchor": {
-        "x": 7.217532420182814,
-        "y": 2.6568204284962973
+        "x": 6.972291835764879,
+        "y": 2.641278916392324
       },
       "prevControl": {
-        "x": 7.252343776211719,
-        "y": 3.151088286250224
+        "x": 6.993349401328415,
+        "y": 3.513345488088955
       },
       "nextControl": {
-        "x": 7.0303508469742715,
-        "y": -0.0008707893918398213
+        "x": 6.901624179853083,
+        "y": -0.2853129650335404
       },
       "isLocked": false,
       "linkedName": null
@@ -82,7 +82,7 @@
       "rotationDegrees": -90.0
     },
     {
-      "waypointRelativePos": 3.053627760252366,
+      "waypointRelativePos": 2.9394962539432177,
       "rotationDegrees": 90.0
     },
     {
@@ -160,7 +160,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.2,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 5.2,
     "maxAngularVelocity": 270.0,
     "maxAngularAcceleration": 270.0,
     "nominalVoltage": 12.0,
@@ -173,7 +173,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 2.0,
     "rotation": -90.0
   },
   "useDefaultConstraints": false

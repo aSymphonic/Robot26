@@ -360,20 +360,23 @@ public class RobotContainer {
         new Trigger(() -> driverController.getPOV() == 0)
                 .onTrue(new InstantCommand(shooter::toggleManualDistanceOne))
                 .onTrue(new InstantCommand(shooter::disableManualDistanceTwo))
-                .onTrue(new InstantCommand(shooter::disableManualDistanceThree));
+                .onTrue(new InstantCommand(shooter::disableManualDistanceThree))
+                .onTrue(new InstantCommand(shooter::disableManualDistanceFour));
 
         new Trigger(() -> driverController.getPOV() == 90)
                 .onTrue(new InstantCommand(drivebase::setX));
 
         new Trigger(() -> driverController.getPOV() == 180)
-                .onTrue(new InstantCommand(shooter::toggleManaualDistanceThree))
+                .onTrue(new InstantCommand(shooter::enableManualDistanceFour))
                 .onTrue(new InstantCommand(shooter::disableManualDistanceOne))
-                .onTrue(new InstantCommand(shooter::disableManualDistanceTwo));
+                .onTrue(new InstantCommand(shooter::disableManualDistanceTwo))
+                .onTrue(new InstantCommand(shooter::disableManualDistanceThree));
 
         new Trigger(() -> driverController.getPOV() == 270)
                 .onTrue(new InstantCommand(shooter::toggleManualDistanceTwo))
                 .onTrue(new InstantCommand(shooter::disableManualDistanceOne))
-                .onTrue(new InstantCommand(shooter::disableManualDistanceThree));
+                .onTrue(new InstantCommand(shooter::disableManualDistanceThree))
+                .onTrue(new InstantCommand(shooter::disableManualDistanceFour));
 
         new Trigger(() -> driverController.getRightBumperButton())
                 .onTrue(new InstantCommand(intake::togglePivit));
@@ -385,9 +388,12 @@ public class RobotContainer {
                 .whileTrue(new Shoot(drivebase, shooter, hopper, intake));
 
         new Trigger(() -> driverController.getRightTrigger())
-                .onTrue(new InstantCommand(shooter::enableManualDistanceFour))
+                .onTrue(new InstantCommand(shooter::disableManualDistanceFour))
+                .onTrue(new InstantCommand(shooter::disableManualDistanceThree))
+                .onTrue(new InstantCommand(shooter::disableManualDistanceOne))
+                .onTrue(new InstantCommand(shooter::enableManualDistanceTwo))
                 .whileTrue(new Shoot(drivebase, shooter, hopper, intake))
-                .onFalse(new InstantCommand(shooter::disableManualDistanceFour));
+                .onFalse(new InstantCommand(shooter::disableManualDistanceTwo));
 
         new Trigger(() -> driverController.getAButton())
                 .onTrue(new InstantCommand(drivebase::setBumpHappened));

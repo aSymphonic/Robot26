@@ -75,7 +75,7 @@ public final class Constants {
     public static int SHOOTER_FLYWHEEL_CURRENT_LIMIT = 65;
     public static int SHOOTER_INFEED_CURRENT_LIMIT = 40;
     public static int SHOOTER_HOOD_CURRENT_LIMIT = 8;
-    public static int INTAKE_CURRENT_LIMIT = 30;
+    public static int INTAKE_CURRENT_LIMIT = 35;
     public static int INTAKE_PIVOT_CURRENT_LIMIT = 8;
     public static int LOWER_ROLLERS_CURRENT_LIMIT = 25;
 
@@ -360,11 +360,11 @@ public final class Constants {
         // for
         // full weight robot.
         public static final double kDriveReductionPct = 1; // Percentage of max linear speed. e.g. .50 == 50%
-        public static final double kRotationReductionPct = .75; // Percentage of max rotational speed. e.g. .70 == 70%
+        public static final double kRotationReductionPct = .80; // Percentage of max rotational speed. e.g. .70 == 70%
 
         // Factors used to slow robot speed for fine driving.
         public static final double kSlowModeLinearPct = .40; // 15% of max linear speed.
-        public static final double kSlowModeRotationPct = .40; // 40% of max rotational speed.
+        public static final double kSlowModeRotationPct = .20; // 40% of max rotational speed.
 
         // Drive Motor ramp rate. Needs to be tuned for full weight robot.
         public static final double kDriveRampRate = .5; // 0 to 12v in .5 second.
