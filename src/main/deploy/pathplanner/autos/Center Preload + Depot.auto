@@ -25,6 +25,12 @@
                 "data": {
                   "name": "lowHopperShoot"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "hubTrack"
+                }
               }
             ]
           }
@@ -49,6 +55,12 @@
                 "type": "named",
                 "data": {
                   "name": "lowHopperShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "hubTrack"
                 }
               }
             ]
