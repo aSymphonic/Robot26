@@ -211,7 +211,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       // This should not be changed
       // Here is the link to documentation for pathplanner setup:
       AutoBuilder.configure(
-          () -> RobotContainer.drivebase.getPose(), // Supplier of current robot pose
+          () -> RobotContainer.drivebase.getODPose(), // Supplier of current robot pose
           this::resetPose, // Consumer for seeding pose against auto
           () -> getState().Speeds, // Supplier of current robot speeds
           // Consumer of ChassisSpeeds and feedforwards to drive the robot

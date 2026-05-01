@@ -181,6 +181,10 @@ public class DriveCommand extends Command {
                 drivebase.setX();
             }
 
+            if (SmartDashboard.getBoolean(Constants.SmartDashboardKeys.ROBOT_CURRENTLY_USING_QUEST, true)){
+                rotation = rotation * 0.6;
+            }
+
             drivebase.drive(throttle, strafe, rotation);
             return;
         } else {
