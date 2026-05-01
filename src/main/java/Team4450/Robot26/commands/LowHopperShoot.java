@@ -43,8 +43,10 @@ public class LowHopperShoot extends Command {
         xTimer.start();
         xTimer.reset();
         intake.slowIntake();
+        intake.pivitDown();
         infeedDelay.start();
         infeedDelay.reset();
+        drivebase.enabledSlowMode();
     }
 
     @Override
@@ -65,11 +67,17 @@ public class LowHopperShoot extends Command {
             shooter.startInfeed();
         }
 
+        if (this.shooter.flywheelTooLow()) {
+            shooter.stopInfeed();
+        } else {
+            shooter.startInfeed();
+        }
+
         if (!this.shooter.flywheelWithinSpeed()) {
             SmartDashboard.putNumber(Constants.SmartDashboardKeys.INFEED_TARGET_RPM, (Constants.INFEED_DEFAULT_TARGET_RPM - Math.max(shooter.flywheelRPMError * 5, 0)));
         }
 
-        if (pivotDelay.hasElapsed(1) && pviotIncrementTimer.hasElapsed(0.10) && SmartDashboard.getNumber(Constants.SmartDashboardKeys.PIVOT_POSITION, 0) > 0.1) {
+        if (pivotDelay.hasElapsed(0.5) && pviotIncrementTimer.hasElapsed(0.2) && SmartDashboard.getNumber(Constants.SmartDashboardKeys.PIVOT_POSITION, 0) > 0.1) {
             intake.incrementPivitUp(0.05);
             pviotIncrementTimer.reset();
             
@@ -90,6 +98,6 @@ public class LowHopperShoot extends Command {
         hopper.stop();
         intake.pivitDown();
         intake.stopIntake();
-        
+        drivebase.disableSlowMode();
     }
 }

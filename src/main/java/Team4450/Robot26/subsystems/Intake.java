@@ -131,22 +131,24 @@ public class Intake extends SubsystemBase {
         if (this.runIntake) {
             if (SmartDashboard.getBoolean(Constants.SmartDashboardKeys.AUTONOMOUS_ACTIVE, true)) {
                 if (this.reverseIntake) {
+                    setIntakeRPM(-7000);
+                } else {
+                    setIntakeRPM(7000);
+                }
+            } else {
+                if (this.reverseIntake) {
                     setIntakeRPM(-Constants.INTAKE_DEFAULT_TARGET_RPM);
                 } else {
                     setIntakeRPM(Constants.INTAKE_DEFAULT_TARGET_RPM);
                 }
-            } else {
-                double maxRPM = Constants.INTAKE_DEFAULT_TARGET_RPM;
-                double minRPM = Constants.INTAKE_DEFAULT_MINIMUM_RPM;
                 // gets intake speed based off of robot speed. Faster robot = faster intake
-                double scaledIntakeSpeed = (maxRPM - minRPM) * ((2 * RobotContainer.drivebase.getTotalVelocity()) / 5.21);
-                SmartDashboard.putNumber("scaledIntakeSpeed", scaledIntakeSpeed);
-                if (this.reverseIntake) {
-                    //set rpm to a value between max rpm and min rpm, scaled by robot speed
-                    setIntakeRPM(-clamp(minRPM, maxRPM, scaledIntakeSpeed));
-                } else {
-                    setIntakeRPM(clamp(minRPM, maxRPM, scaledIntakeSpeed));
-                }
+                // double scaledIntakeSpeed = Constants.INTAKE_DEFAULT_TARGET_RPM * (RobotContainer.drivebase.getTotalVelocity() * 2 / 5.21);
+                // if (this.reverseIntake) {
+                //     //set rpm to a value between max rpm and min rpm, scaled by robot speed
+                //     setIntakeRPM(-clamp(Constants.INTAKE_DEFAULT_MINIMUM_RPM, Constants.INTAKE_DEFAULT_TARGET_RPM, scaledIntakeSpeed));
+                // } else {
+                //     setIntakeRPM(clamp(Constants.INTAKE_DEFAULT_MINIMUM_RPM, Constants.INTAKE_DEFAULT_TARGET_RPM, scaledIntakeSpeed));
+                // }
             }
         }
     }
