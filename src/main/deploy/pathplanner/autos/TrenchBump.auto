@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CS-Shoot"
+            "pathName": "TrenchBump Pass 1"
           }
         },
         {
@@ -17,13 +17,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 4.0
+                  "waitTime": 5.0
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "lowHopperShoot"
+                  "name": "shoot"
                 }
               },
               {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C Shoot to Depot"
+            "pathName": "TrenchBump Pass 2"
           }
         },
         {
@@ -48,13 +48,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 4.0
+                  "waitTime": 5.0
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "lowHopperShoot"
+                  "name": "shoot"
                 }
               },
               {

@@ -32,32 +32,32 @@
     },
     {
       "anchor": {
-        "x": 8.148405556716432,
-        "y": 2.6479549700531195
+        "x": 8.1670085058171,
+        "y": 2.3361004717938316
       },
       "prevControl": {
-        "x": 8.20550903336207,
-        "y": 2.3756190962749946
+        "x": 8.224111982462738,
+        "y": 2.0637645980157067
       },
       "nextControl": {
-        "x": 7.818463203463203,
-        "y": 4.221504329004329
+        "x": 7.837066152563871,
+        "y": 3.909649830745041
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.972291835764879,
-        "y": 2.641278916392324
+        "x": 6.955688962729978,
+        "y": 2.3951116071428578
       },
       "prevControl": {
-        "x": 6.993349401328415,
-        "y": 3.513345488088955
+        "x": 6.961409099062801,
+        "y": 3.2674136228338173
       },
       "nextControl": {
-        "x": 6.901624179853083,
-        "y": -0.2853129650335404
+        "x": 6.938165838068182,
+        "y": -0.27710738805465285
       },
       "isLocked": false,
       "linkedName": null
@@ -97,11 +97,11 @@
   "constraintZones": [
     {
       "name": "Intake Speed",
-      "minWaypointRelativePos": 1.2324324324324318,
+      "minWaypointRelativePos": 2.034206081081081,
       "maxWaypointRelativePos": 2.9045045045045077,
       "constraints": {
         "maxVelocity": 3.0,
-        "maxAcceleration": 4.0,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 270.0,
         "maxAngularAcceleration": 270.0,
         "nominalVoltage": 12.0,
