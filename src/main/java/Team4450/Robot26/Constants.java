@@ -184,10 +184,10 @@ public final class Constants {
 
     public static double FIELD_MIDDLE_Y = 4.021;
 
-    public static double ROBOT_HEADING_KP = 0.06;
+    public static double ROBOT_HEADING_KP = 0.02;
     public static double ROBOT_HEADING_KI = 0;
     public static double ROBOT_HEADING_KI_MAX = 0;
-    public static double ROBOT_HEADING_KD = 0.01;
+    public static double ROBOT_HEADING_KD = 0.002;
     public static double ROBOT_HEADING_TOLERANCE_DEG = 6;
     public static boolean HUB_TRACKING = false;
 

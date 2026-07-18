@@ -140,7 +140,7 @@ public class DriveCommand extends Command {
         targetHeading = normalizeAngle(targetHeading);
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.TARGET_HEADING, targetHeading);
 
-        double drivebaseYaw = drivebase.getODPose().getRotation().getDegrees();
+        double drivebaseYaw = drivebase.getPose().getRotation().getDegrees();
         double headingError = drivebaseYaw - targetHeading;
         SmartDashboard.putNumber("Heading Error", headingError);
 
@@ -160,7 +160,6 @@ public class DriveCommand extends Command {
 
             if (Math.abs(headingError) <= 5 || Math.abs(headingError) >= 355) {
                 RobotContainer.driverController.setRumble(RumbleType.kBothRumble, 0.3);
-                rotation = 0;
             } else {
                 RobotContainer.driverController.setRumble(RumbleType.kBothRumble, 0);
             }
@@ -170,20 +169,20 @@ public class DriveCommand extends Command {
             double yDiff = Math.abs(goalPose.getY() - drivebase.getPose().getY());
             double distToGoal = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 
-            if (distToGoal < 2 && Math.abs(headingError) < 7) {
+            if (distToGoal < 2 && Math.abs(headingError) < 0.5) {
                 rotation = 0;
                 drivebase.setX();
-            } else if (distToGoal > 2 && distToGoal < 4 && Math.abs(headingError) < 5) {
+            } else if (distToGoal > 2 && distToGoal < 4 && Math.abs(headingError) < 0.5) {
                 rotation = 0;
                 drivebase.setX();
-            } else if (distToGoal > 4 && Math.abs(headingError) < 3) {
+            } else if (distToGoal > 4 && Math.abs(headingError) < 0.5) {
                 rotation = 0;
                 drivebase.setX();
             }
 
-            if (SmartDashboard.getBoolean(Constants.SmartDashboardKeys.ROBOT_CURRENTLY_USING_QUEST, true)){
-                rotation = rotation * 0.6;
-            }
+            // if (SmartDashboard.getBoolean(Constants.SmartDashboardKeys.ROBOT_CURRENTLY_USING_QUEST, true)){
+            //     rotation = rotation * 0.6;
+            // }
 
             drivebase.drive(throttle, strafe, rotation);
             return;
