@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.DoubleSupplier;
 
+import org.opencv.core.Mat;
+
 import com.ctre.phoenix6.swerve.SwerveRequest.RobotCentricFacingAngle;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -18,6 +20,8 @@ import static Team4450.Robot26.Constants.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveCommand extends Command {
+    private int jiggleCounter = 0;
+
     private final Drivebase drivebase;
 
     private final DoubleSupplier throttleSupplier;
@@ -147,6 +151,11 @@ public class DriveCommand extends Command {
         if (Constants.HUB_TRACKING) {
             // Uses a PID and the previous assigned target heading to rotate there
             double rotation = headingPID.calculate(drivebaseYaw, targetHeading);
+            if (rotation > -0.07 && rotation < 0) {
+                rotation = -0.07;
+            } else if (rotation < 0.07 && rotation > 0) {
+                rotation = 0.07;
+            }
             SmartDashboard.putNumber(Constants.SmartDashboardKeys.HEADING_PID_OUTPUT, rotation);
             double throttle = throttleSupplier.getAsDouble();
             double strafe = strafeSupplier.getAsDouble();
@@ -169,15 +178,15 @@ public class DriveCommand extends Command {
             double yDiff = Math.abs(goalPose.getY() - drivebase.getPose().getY());
             double distToGoal = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 
-            if (distToGoal < 2 && Math.abs(headingError) < 0.5) {
+            if (Math.abs(headingError) < 0.7) {
                 rotation = 0;
-                drivebase.setX();
-            } else if (distToGoal > 2 && distToGoal < 4 && Math.abs(headingError) < 0.5) {
-                rotation = 0;
-                drivebase.setX();
-            } else if (distToGoal > 4 && Math.abs(headingError) < 0.5) {
-                rotation = 0;
-                drivebase.setX();
+                jiggleCounter += 1;
+                // drivebase.setX();
+            }
+
+            if (jiggleCounter > 10) {
+                jiggleCounter = 0;
+                Constants.HUB_TRACKING = false;
             }
 
             // if (SmartDashboard.getBoolean(Constants.SmartDashboardKeys.ROBOT_CURRENTLY_USING_QUEST, true)){
@@ -233,4 +242,5 @@ public class DriveCommand extends Command {
 
         return normalizedAngle;
     }
+
 }
