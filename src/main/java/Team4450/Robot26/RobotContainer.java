@@ -384,10 +384,10 @@ public class RobotContainer {
         new Trigger(() -> driverController.getLeftBumperButton()) // Rich
                 .onChange(new InstantCommand(drivebase::toggleSlowMode));
 
-        new Trigger(() -> driverController.getLeftTrigger())
+        new Trigger(() -> driverController.getRightTrigger())
                 .whileTrue(new Shoot(drivebase, shooter, hopper, intake));
 
-        new Trigger(() -> driverController.getRightTrigger())
+        new Trigger(() -> driverController.getLeftTrigger())
                 .onTrue(new InstantCommand(shooter::disableManualDistanceFour))
                 .onTrue(new InstantCommand(shooter::disableManualDistanceThree))
                 .onTrue(new InstantCommand(shooter::disableManualDistanceOne))
@@ -400,6 +400,7 @@ public class RobotContainer {
 
         new Trigger(() -> driverController.getBButton())
                 .onTrue(new InstantCommand(visionSubsystem::resetYaw))
+                .onTrue(new InstantCommand(questNavSubsystem::zeroQuest2d))
                 .onTrue(new InstantCommand(drivebase::resetFieldOrientation));
 
         // new Trigger(() -> driverController.getBButton())

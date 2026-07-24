@@ -8,6 +8,7 @@ import Team4450.Robot26.Constants.SmartDashboardKeys;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import gg.questnav.questnav.PoseFrame;
@@ -70,6 +71,10 @@ public class QuestNavSubsystem extends SubsystemBase {
         Pose3d pose = new Pose3d(newPose);
 
         questNav.setPose(pose);
+    }
+
+    public void zeroQuest2d() {
+        questNav.setPose(new Pose3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0)));
     }
 
     public Pose2d getQuestPose() {
