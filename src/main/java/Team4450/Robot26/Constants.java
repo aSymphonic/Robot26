@@ -190,6 +190,7 @@ public final class Constants {
     public static double ROBOT_HEADING_KD = 0.002;
     public static double ROBOT_HEADING_TOLERANCE_DEG = 6;
     public static boolean HUB_TRACKING = false;
+    public static boolean SHOOT_ON_THE_MOVE = false;
 
     // Interpolation table
     public static double[] FLYWHEEL_SPEED_TABLE = { 3650, 3650, 3750, 3950, 4150, 4400, 4500, 4000 }; // Converted from
@@ -295,6 +296,8 @@ public final class Constants {
         public static final String HEADING_PID_OUTPUT = "Heading PID Output";
         public static final String TARGET_HEADING = "Target Heading";
         public static final String HEADING_ERROR = "Heading Error";
+        public static final String SOM_HUB_POSE = "SOM Hub Pose";
+        public static final String SOM = "Shoot On the Move";
 
         // Pivit
         public static final String PIVOT_POSITION = "Pivit Position";

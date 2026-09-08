@@ -386,6 +386,9 @@ public class Shooter extends SubsystemBase {
 
     public Pose2d getGoalPose() {
         // If blue side
+        if (SmartDashboard.getBoolean(Constants.SmartDashboardKeys.SOM, false)) {
+            return SmartDashboard.getData(Constants.SmartDashboardKeys.SOM_HUB_POSE);
+        }
         if (alliance == Alliance.Blue) {
             return HUB_BLUE_WELDED_POSE;
         // If red side
@@ -601,6 +604,18 @@ public class Shooter extends SubsystemBase {
         // Convert velocity to RPM
         double rpmMath = velocity * CONVERSION_FACTOR_MPS_TO_RPM;
         return rpmMath;
+    }
+
+    public double calcualteVelocity(Pose2d robotPose, Pose2d hubPose, double hoodAngle) {
+        double deltaX = hubPose.getX() - robotPose.getX();
+        double deltaY = hubPose.getY() - robotPose.getY();
+        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        // Calculate the required velocity to reach the hub
+        double velocity = Math.sqrt((GRAVITY * distance * distance) / 
+            (2 * (distance * Math.tan(hoodAngle) - (GOAL_HEIGHT - FLYWHEEL_HEIGHT))));
+
+        return velocity;
     }
 
     /**

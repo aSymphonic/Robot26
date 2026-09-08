@@ -3,11 +3,14 @@ package Team4450.Robot26.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+
+import java.awt.Robot;
 import java.util.function.DoubleSupplier;
 
 import org.opencv.core.Mat;
 
 import com.ctre.phoenix6.swerve.SwerveRequest.RobotCentricFacingAngle;
+import com.fasterxml.jackson.databind.util.RootNameLookup;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,6 +19,8 @@ import Team4450.Lib.Util;
 import Team4450.Robot26.Constants;
 import Team4450.Robot26.RobotContainer;
 import Team4450.Robot26.subsystems.Drivebase;
+import Team4450.Robot26.subsystems.Shooter;
+
 import static Team4450.Robot26.Constants.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -74,6 +79,7 @@ public class DriveCommand extends Command {
 
         // Somewhere in here for the pose estimate for the robot there is a problem where on the red side the robot seems to point to the left. There does not seem to be a problem with the blue side
 
+
         // This finds where the correct hub position is
         Pose2d hubPosition;
         if (alliance == DriverStation.Alliance.Blue) {
@@ -81,6 +87,14 @@ public class DriveCommand extends Command {
         } else {
             hubPosition = new Pose2d(HUB_RED_WELDED_POSE.getX(), HUB_RED_WELDED_POSE.getY(), Rotation2d.kZero);
         }
+
+        double hoodAngle = RobotContainer.shooter.getHoodMotorAngleRadians();
+        
+        double tof = SmartDashboard.getNumber(Constants.SmartDashboardKeys.ROBOT_DISTANCE, 0) / (RobotContainer.shooter.calcualteVelocity(drivebase.getPose(), hubPosition, hoodAngle) * Math.cos(hoodAngle));
+
+        hubPosition = new Pose2d(hubPosition.getX() - tof*drivebase.getXVelocity(), hubPosition.getY() - tof*drivebase.getYVelocity(), Rotation2d.kZero);
+
+        SmartDashboard.putString(Constants.SmartDashboardKeys.SOM_HUB_POSE, hubPosition.toString());
 
         double targetHeading;
 
