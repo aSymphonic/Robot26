@@ -381,8 +381,8 @@ public class RobotContainer {
         new Trigger(() -> driverController.getRightBumperButton())
                 .onTrue(new InstantCommand(intake::togglePivit));
 
-        new Trigger(() -> driverController.getLeftBumperButton()) // Rich
-                .onChange(new InstantCommand(drivebase::toggleSlowMode));
+        //new Trigger(() -> driverController.getLeftBumperButton()) // Rich
+        //        .onChange(new InstantCommand(drivebase::toggleSlowMode));
 
         new Trigger(() -> driverController.getRightTrigger())
                 .whileTrue(new Shoot(drivebase, shooter, hopper, intake));
@@ -394,6 +394,7 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(shooter::enableManualDistanceTwo))
                 .whileTrue(new Shoot(drivebase, shooter, hopper, intake))
                 .onFalse(new InstantCommand(shooter::disableManualDistanceTwo));
+
 
         new Trigger(() -> driverController.getAButton())
                 .onTrue(new InstantCommand(drivebase::setBumpHappened));

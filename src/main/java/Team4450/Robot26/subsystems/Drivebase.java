@@ -13,6 +13,8 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import Team4450.Lib.Util;
+import Team4450.Lib.Wpilib.PIDController;
+
 import static Team4450.Robot26.Constants.*;
 
 import Team4450.Robot26.Constants;
@@ -64,7 +66,8 @@ public class Drivebase extends SubsystemBase {
   // to control what is displayed (the simulated robot).
   private final Field2d field2d = new Field2d();
 
-  private boolean fieldRelativeDriving = true, slowMode = false;
+  private boolean slowMode = false;
+  private boolean fieldRelativeDriving = true;
   private boolean neutralModeBrake = true;
   private double maxSpeed = kMaxSpeed * kDriveReductionPct;
   private double maxRotRate = kMaxAngularRate * kRotationReductionPct;
@@ -77,6 +80,7 @@ public class Drivebase extends SubsystemBase {
 
   public boolean wallTrackingLeft = false;
   public boolean wallTrackingRight = false;
+
 
   private final SwerveRequest.FieldCentric driveField = new SwerveRequest.FieldCentric()
       .withDeadband(kMaxSpeed * DRIVE_DEADBAND)
@@ -135,7 +139,7 @@ public class Drivebase extends SubsystemBase {
 
     // Register for SDS telemetry.
     // sdsDrivebase.registerTelemetry(logger::telemeterize);
-
+    //
     updateDS();
   }
 
@@ -152,8 +156,21 @@ public class Drivebase extends SubsystemBase {
     updateModulePoses(sdsDrivebase);
 
     SmartDashboard.putString(Constants.SmartDashboardKeys.ROBOT_POSE, getPose().toString());
+    SmartDashboard.putBoolean("Slow Mode", false);
     SmartDashboard.putBoolean(Constants.SmartDashboardKeys.HUB_TRACKING, Constants.HUB_TRACKING);
     SmartDashboard.putBoolean(Constants.SmartDashboardKeys.BUMP_HAPPENED, this.bumpHappened);
+
+    if (slowMode) {
+      // In slow mode, apply slow mode percentages.
+      SmartDashboard.putBoolean("Slow Mode", true);
+      maxSpeed = kMaxSpeed * kSlowModeLinearPct;
+      maxRotRate = kMaxAngularRate * kSlowModeRotationPct;
+    } else {
+      // In normal mode, apply reduction percentages.
+      SmartDashboard.putBoolean("Slow Mode", false);
+      maxSpeed = kMaxSpeed * kDriveReductionPct;
+      maxRotRate = kMaxAngularRate * kRotationReductionPct;
+    }
 
     Pose2d drivebasePose = getPose();
     if (Math.abs(drivebasePose.getX()) > Constants.FIELD_MAX_X || Math.abs(drivebasePose.getY()) > Constants.FIELD_MAX_Y) {
@@ -294,15 +311,6 @@ public class Drivebase extends SubsystemBase {
 
     Util.consoleLog("%b", slowMode);
 
-    if (slowMode) {
-      // In slow mode, apply slow mode percentages.
-      maxSpeed = kMaxSpeed * kSlowModeLinearPct;
-      maxRotRate = kMaxAngularRate * kSlowModeRotationPct;
-    } else {
-      // In normal mode, apply reduction percentages.
-      maxSpeed = kMaxSpeed * kDriveReductionPct;
-      maxRotRate = kMaxAngularRate * kRotationReductionPct;
-    }
   }
 
   public void toggleNeutralMode() {
@@ -588,5 +596,47 @@ public class Drivebase extends SubsystemBase {
 
   public void setBumpHappened() {
       this.bumpHappened = true;
+  }
+
+  public double constrainY(double limitNeg, double limitPosi, double power) {
+      boolean yNegReached = getPose().getY() < limitNeg; 
+      boolean yPosiReached = getPose().getY() > limitPosi; 
+
+      if(yNegReached) {
+          if(power < 0) {
+              setX();
+              return 0;
+          }
+          return power;
+      } else if(yPosiReached) {
+          if(power > 0) {
+              setX();
+              return 0;
+          }
+          return power;
+      } else {
+          return power;
+      }
+  }
+
+  public double constrainX(double limitNeg, double limitPosi, double power) {
+      boolean xNegReached = getPose().getY() < limitNeg; 
+      boolean xPosiReached = getPose().getY() > limitPosi; 
+
+      if(xNegReached) {
+          if(power < 0) {
+              setX();
+              return 0;
+          }
+          return power;
+      } else if(xPosiReached) {
+          if(power > 0) {
+              setX();
+              return 0;
+          }
+          return power;
+      } else {
+          return power;
+      }
   }
 }

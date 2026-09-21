@@ -186,6 +186,7 @@ public class DriveCommand extends Command {
 
             if (jiggleCounter > 10) {
                 jiggleCounter = 0;
+                drivebase.disableSlowMode();
                 Constants.HUB_TRACKING = false;
             }
 

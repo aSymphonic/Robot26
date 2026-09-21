@@ -192,7 +192,7 @@ public final class Constants {
     public static boolean HUB_TRACKING = false;
 
     // Interpolation table
-    public static double[] FLYWHEEL_SPEED_TABLE = { 3650, 3650, 3750, 3950, 4150, 4400, 4500, 4000 }; // Converted from
+    public static double[] FLYWHEEL_SPEED_TABLE = { 3550, 3550, 3650, 3850, 4050, 4300, 4400, 4000 }; // Converted from
                                                                                                 // percentages to
     // RPM
     public static double[] FLYWHEEL_SPEED_DISTANCE_TABLE = { 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5.5 };
@@ -340,6 +340,11 @@ public final class Constants {
         public static final String BUMP_HAPPENED = "Bump Happened";
         public static final String DISTANCE_BOX = "Distance Box";
         public static final String OUTSIDE_FIELD = "Outside Field";
+
+        // Drive Limit PID
+        public static final String LIMIT_KP = "Limit P";
+        public static final String LIMIT_KI = "Limit I";
+        public static final String LIMIT_KD = "Limit D";
     }
 
     public static final class DriveConstants {
@@ -363,12 +368,12 @@ public final class Constants {
         // The split below matches the rotation speed to drive speed. Needs to be tuned
         // for
         // full weight robot.
-        public static final double kDriveReductionPct = 1; // Percentage of max linear speed. e.g. .50 == 50%
+        public static final double kDriveReductionPct = 1.0; // Percentage of max linear speed. e.g. .50 == 50%
         public static final double kRotationReductionPct = .80; // Percentage of max rotational speed. e.g. .70 == 70%
 
         // Factors used to slow robot speed for fine driving.
-        public static final double kSlowModeLinearPct = .40; // 15% of max linear speed.
-        public static final double kSlowModeRotationPct = .20; // 40% of max rotational speed.
+        public static final double kSlowModeLinearPct = .20; // 15% of max linear speed.
+        public static final double kSlowModeRotationPct = .80; // 40% of max rotational speed.
 
         // Drive Motor ramp rate. Needs to be tuned for full weight robot.
         public static final double kDriveRampRate = .5; // 0 to 12v in .5 second.

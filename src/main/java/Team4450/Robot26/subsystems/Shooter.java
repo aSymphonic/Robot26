@@ -95,10 +95,10 @@ public class Shooter extends SubsystemBase {
     public Shooter(Drivebase drivebase) {
         this.drivebase = drivebase;
 
-        this.canFlywheel = flywheelMotorTopLeft.isConnected() && flywheelMotorTopRight.isConnected() && flywheelMotorBottomLeft.isConnected() && flywheelMotorBottomRight.isConnected();
+        this.canFlywheel = robotAtTarget() && flywheelMotorTopLeft.isConnected() && flywheelMotorTopRight.isConnected() && flywheelMotorBottomLeft.isConnected() && flywheelMotorBottomRight.isConnected();
         // this.canHood = hoodLeft.isConnected() && hoodRight.isConnected();
         this.canHood = hoodLeft.isConnected();
-        this.canInfeed = infeedMotorLeft.isConnected() && infeedMotorRight.isConnected();
+        this.canInfeed = infeedMotorLeft.isConnected() && infeedMotorRight.isConnected() && robotAtTarget();
 
         this.hoodMotorPosition = 0;
 
@@ -173,6 +173,10 @@ public class Shooter extends SubsystemBase {
         
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.HOOD_ANGLE, getHoodMotorAngleRadians());
         SmartDashboard.putNumber(Constants.SmartDashboardKeys.HOOD_MOTOR_POSITION, getHoodMotorPosition());
+        this.canFlywheel = robotAtTarget() && flywheelMotorTopLeft.isConnected() && flywheelMotorTopRight.isConnected() && flywheelMotorBottomLeft.isConnected() && flywheelMotorBottomRight.isConnected();
+        // this.canHood = hoodLeft.isConnected() && hoodRight.isConnected();
+        this.canHood = hoodLeft.isConnected();
+        this.canInfeed = infeedMotorLeft.isConnected() && infeedMotorRight.isConnected() && robotAtTarget();
 
         double measuredRps =
                 flywheelMotorTopLeft.getRotorVelocity()
@@ -369,7 +373,7 @@ public class Shooter extends SubsystemBase {
 
     public boolean robotAtTarget() {
         // Change tolerence to a constant at some point
-        if (Math.abs(SmartDashboard.getNumber("Heading Error", 0)) < 14) { // This will have a little delay on it, but should be fine
+        if (Math.abs(SmartDashboard.getNumber("Heading Error", 0)) < 5) { // This will have a little delay on it, but should be fine
             return true;
         } else {
             return false;
